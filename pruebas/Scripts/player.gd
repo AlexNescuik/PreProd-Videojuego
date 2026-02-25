@@ -67,8 +67,8 @@ var dir_accion         : float = 0.0
 var input_dir   : float = 0.0
 var input_corre : bool  = false
 
-var vida_maxima : int = 3
-var vida_actual : int = 3
+var vida_maxima : int = 800
+var vida_actual : int = 800
 var es_invulnerable : bool = false
 var posicion_inicio : Vector2 
 var mask_original : int
