@@ -6,13 +6,13 @@ signal juego_terminado
 # #########################################################
 # 1. ESTADOS Y CONFIGURACIÓN
 # #########################################################
-enum Estado { IDLE, MOVIENDO, SALTANDO, CAYENDO, ATACANDO, ROLL, DASH, PARED, GROUND_POUND, DIVE, HERIDO, MUERTO }
+enum Estado { IDLE, MOVIENDO, SALTANDO, CAYENDO, ATACANDO, ROLL, DASH, PARED, GROUND_POUND, DIVE, PARRY, ATURDIDO, MUERTO }
 
 @export_group("Movimiento Horizontal")
 const VEL_NORMAL        = 100.0
 const VEL_CORRER        = 170.0
-const VEL_DASH          = 250.0 
-const VEL_ROLL          = 250.0 
+const VEL_DASH          = 350.0 
+const VEL_ROLL          = 300.0 
 
 @export_group("Salto y Gravedad")
 const FUERZA_SALTO       = -300.0
@@ -33,39 +33,40 @@ const VEL_DIVE_Y            = -200.0
 const PAUSA_ANTICIPACION     = 0.3 
 const VENTANA_SALTO_POTENTE  = 0.2 
 const TIEMPO_MAX_DASH        = 0.3 
-const TIEMPO_MAX_ROLL        = 0.5 
+const TIEMPO_MAX_ROLL        = 0.3 
+const TIEMPO_MAX_PARRY       = 0.4 
+const TIEMPO_MAX_ATURDIDO    = 0.4 
 
 @export_group("Combate y Vida")
-const FUERZA_RETROCESO_DAÑO = Vector2(200, -200) 
 @export var limite_caida_y : int = 200 
 
 # #########################################################
-# 2. VARIABLES DE CONTROL Y NODOS
+# 2. VARIABLES DE CONTROL
 # #########################################################
 var estado_actual      : Estado = Estado.IDLE
 
-# Timers
 var timer_super_salto  : float = 0.0
 var timer_ground_pound : float = 0.0
 var timer_wall_jump    : float = 0.0 
 var coyote_timer       : float = 0.0
 var jump_buffer_timer  : float = 0.0
+
 var tiempo_dash_actual = 0.0   
 var tiempo_roll_actual = 0.0 
+var tiempo_parry_actual = 0.0
+var tiempo_aturdido_actual = 0.0
 
-# Banderas de estado
 var es_salto_potenciado: bool = false
 var puedo_hacer_dive   : bool = true 
 var bloqueo_dash       = false 
+var bloqueo_roll       = false 
 var recuperando_gp     : bool = false    
 var esperando_reinicio : bool = false 
 var dir_accion         : float = 0.0 
 
-# Inputs
 var input_dir   : float = 0.0
 var input_corre : bool  = false
 
-# Vida y Respawn
 var vida_maxima : int = 3
 var vida_actual : int = 3
 var es_invulnerable : bool = false
@@ -76,7 +77,7 @@ var mask_original : int
 @onready var hitbox_ataque = $HitboxAtaque/CollisionShape2D
 
 # #########################################################
-# 3. BUCLE PRINCIPAL (BUILT-IN)
+# 3. BUCLE PRINCIPAL
 # #########################################################
 func _ready():
 	posicion_inicio = global_position
@@ -100,10 +101,6 @@ func _physics_process(delta: float) -> void:
 		
 	if is_on_floor() and Input.is_action_just_pressed("ui_down"):
 		position.y += 2
-		if estado_actual == Estado.HERIDO:
-			velocity.y += GRAVEDAD * delta
-			move_and_slide()
-			return
 
 	leer_inputs()
 	actualizar_timers(delta)
@@ -114,9 +111,11 @@ func _physics_process(delta: float) -> void:
 		coyote_timer = TIEMPO_COYOTE
 		timer_wall_jump = 0 
 		
-		var teclas_dash_presionadas = Input.is_action_pressed("ui_down") and input_corre
-		if estado_actual != Estado.DASH and not teclas_dash_presionadas:
+		if estado_actual != Estado.DASH and not (Input.is_action_pressed("Ataque") and input_corre):
 			bloqueo_dash = false
+			
+		if estado_actual != Estado.ROLL and not (Input.is_action_pressed("ui_down") and input_corre):
+			bloqueo_roll = false
 	
 	match estado_actual:
 		Estado.IDLE:          logica_idle(delta)
@@ -129,13 +128,12 @@ func _physics_process(delta: float) -> void:
 		Estado.PARED:         logica_pared() 
 		Estado.GROUND_POUND:  logica_ground_pound(delta)
 		Estado.DIVE:          logica_dive()
+		Estado.PARRY:         logica_parry(delta)
+		Estado.ATURDIDO:      logica_aturdido(delta)
 
 	move_and_slide()
 	verificar_inputs_especiales()
 
-# #########################################################
-# 4. INPUTS Y FÍSICAS
-# #########################################################
 func leer_inputs() -> void:
 	if estado_actual == Estado.MUERTO: 
 		input_dir = 0
@@ -145,7 +143,6 @@ func leer_inputs() -> void:
 	var raw_dir = Input.get_axis("ui_left", "ui_right")
 	input_dir = raw_dir if abs(raw_dir) > 0.15 else 0.0
 	input_corre = Input.is_action_pressed("Correr")
-	
 	if Input.is_action_just_pressed("Saltar"):
 		jump_buffer_timer = TIEMPO_BUFFER_SALTO
 
@@ -163,35 +160,46 @@ func procesar_gravedad(delta):
 			var mult = 0.7 if estado_actual == Estado.DIVE else 1.0
 			velocity.y += (GRAVEDAD * mult) * delta
 
-# #########################################################
-# 5. MÁQUINA DE ESTADOS Y TRANSICIONES
-# #########################################################
 func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	if estado_actual == nuevo: return
 	
-	var es_accion = estado_actual in [Estado.ATACANDO, Estado.ROLL, Estado.DASH, Estado.DIVE, Estado.GROUND_POUND, Estado.HERIDO, Estado.MUERTO]
+	var es_accion = estado_actual in [Estado.ATACANDO, Estado.ROLL, Estado.DASH, Estado.DIVE, Estado.GROUND_POUND, Estado.PARRY, Estado.ATURDIDO, Estado.MUERTO]
 	if es_accion and not forzar: return
 	
 	animaciones.speed_scale = 1.0
 	hitbox_ataque.disabled = true 
 	
-	if estado_actual == Estado.ROLL:
-		collision_mask = mask_original
+	# ¡MAGIA AQUÍ! Si salimos del Roll o Dash, volvemos a chocar con enemigos (Capa 3)
+	if estado_actual in [Estado.ROLL, Estado.DASH]:
+		set_collision_mask_value(3, true)
 		
 	estado_actual = nuevo
 	
 	match estado_actual:
 		Estado.ROLL:
 			tiempo_roll_actual = 0.0
-			if input_dir != 0: animaciones.flip_h = (input_dir < 0) # Voltea de inmediato
+			dir_accion = -1 if animaciones.flip_h else 1
 			es_invulnerable = true
-			collision_mask = 1 
-			animaciones.play("Tacleado") 
+			hitbox_ataque.disabled = true 
+			# ¡MAGIA AQUÍ! Apagamos la Capa 3 para que atravieses al enemigo como fantasma
+			set_collision_mask_value(3, false)
+			animaciones.play("Barrido") 
 		Estado.DASH:
 			tiempo_dash_actual = 0.0
-			if input_dir != 0: animaciones.flip_h = (input_dir < 0) # Voltea de inmediato
+			dir_accion = -1 if animaciones.flip_h else 1
 			hitbox_ataque.disabled = false 
-			animaciones.play("Barrido") 
+			animaciones.play("Tacleado") 
+		Estado.PARRY:
+			tiempo_parry_actual = 0.0
+			velocity.x = 0
+			animaciones.play("Parry")
+		Estado.ATURDIDO:
+			tiempo_aturdido_actual = 0.0
+			hitbox_ataque.disabled = true
+			velocity.x = -dir_accion * 200 
+			velocity.y = -150 
+			animaciones.play("IDLE") 
+			animaciones.modulate = Color(0.5, 0.5, 1.0) 
 		Estado.GROUND_POUND:
 			timer_ground_pound = PAUSA_ANTICIPACION
 			recuperando_gp = false 
@@ -212,7 +220,6 @@ func verificar_inputs_especiales() -> void:
 
 	if estado_actual == Estado.GROUND_POUND:
 		if recuperando_gp: return
-		
 		if puedo_hacer_dive and (Input.is_action_just_pressed("Saltar") or Input.is_action_just_pressed("Correr")):
 			hitbox_ataque.disabled = true
 			puedo_hacer_dive = false
@@ -226,7 +233,15 @@ func verificar_inputs_especiales() -> void:
 		cambiar_estado(Estado.SALTANDO)
 		return
 
-	if is_on_floor() and input_corre and Input.is_action_pressed("ui_down") and not bloqueo_dash:
+	if is_on_floor() and Input.is_action_just_pressed("Ataque") and Input.is_action_pressed("ui_up"):
+		cambiar_estado(Estado.PARRY)
+		return
+
+	if is_on_floor() and input_corre and Input.is_action_pressed("ui_down") and not bloqueo_roll:
+		cambiar_estado(Estado.ROLL)
+		return
+
+	if is_on_floor() and input_corre and Input.is_action_just_pressed("Ataque") and not bloqueo_dash:
 		cambiar_estado(Estado.DASH)
 		return
 
@@ -234,7 +249,7 @@ func verificar_inputs_especiales() -> void:
 		if not is_on_floor(): 
 			cambiar_estado(Estado.GROUND_POUND)
 		else: 
-			cambiar_estado(Estado.ROLL if input_corre else Estado.ATACANDO)
+			cambiar_estado(Estado.ATACANDO)
 
 func ejecutar_salto() -> void:
 	if timer_wall_jump > 0:
@@ -253,9 +268,6 @@ func ejecutar_salto() -> void:
 	coyote_timer = 0
 	jump_buffer_timer = 0
 
-# #########################################################
-# 6. LÓGICA DE ESTADOS INDIVIDUALES
-# #########################################################
 @warning_ignore("unused_parameter")
 func logica_idle(delta: float):
 	velocity.x = 0 
@@ -306,49 +318,37 @@ func logica_aire(delta: float) -> void:
 			cambiar_estado(Estado.PARED, true)
 
 func logica_roll(delta: float) -> void:
-	if input_dir != 0:
-		velocity.x = input_dir * VEL_ROLL
-		animaciones.flip_h = (input_dir < 0)
-	else:
-		var dir_actual = -1 if animaciones.flip_h else 1
-		velocity.x = dir_actual * VEL_ROLL
-
+	velocity.x = dir_accion * VEL_ROLL
 	tiempo_roll_actual += delta
 	
-	if not input_corre:
-		terminar_roll()
-		return
-	
 	if tiempo_roll_actual >= TIEMPO_MAX_ROLL or is_on_wall():
-		terminar_roll()
-
-func terminar_roll() -> void:
-	es_invulnerable = false
-	collision_mask = mask_original 
-	cambiar_estado(Estado.MOVIENDO if input_dir != 0 else Estado.IDLE, true)
+		es_invulnerable = false
+		bloqueo_roll = true
+		cambiar_estado(Estado.MOVIENDO if input_dir != 0 else Estado.IDLE, true)
 
 func logica_dash(delta: float) -> void:
-	if input_dir != 0:
-		velocity.x = input_dir * VEL_DASH
-		animaciones.flip_h = (input_dir < 0)
-	else:
-		var dir_actual = -1 if animaciones.flip_h else 1
-		velocity.x = dir_actual * VEL_DASH
-
+	velocity.x = dir_accion * VEL_DASH
 	tiempo_dash_actual += delta
 	
-	# Cancelación manual si sueltas Abajo o Correr
-	if not (Input.is_action_pressed("ui_down") and input_corre):
-		terminar_dash()
+	if is_on_wall():
+		cambiar_estado(Estado.ATURDIDO, true)
 		return
-	
-	if tiempo_dash_actual >= TIEMPO_MAX_DASH or is_on_wall():
-		terminar_dash()
+		
+	if tiempo_dash_actual >= TIEMPO_MAX_DASH:
+		hitbox_ataque.disabled = true
+		bloqueo_dash = true
+		cambiar_estado(Estado.MOVIENDO if input_dir != 0 else Estado.IDLE, true)
 
-func terminar_dash() -> void:
-	hitbox_ataque.disabled = true
-	bloqueo_dash = true
-	cambiar_estado(Estado.MOVIENDO if input_dir != 0 else Estado.IDLE, true)
+func logica_parry(delta: float) -> void:
+	tiempo_parry_actual += delta
+	if tiempo_parry_actual >= TIEMPO_MAX_PARRY:
+		cambiar_estado(Estado.IDLE, true)
+
+func logica_aturdido(delta: float) -> void:
+	tiempo_aturdido_actual += delta
+	if is_on_floor() and tiempo_aturdido_actual >= TIEMPO_MAX_ATURDIDO:
+		animaciones.modulate = Color.WHITE
+		cambiar_estado(Estado.IDLE, true)
 
 func logica_pared():
 	var n = get_wall_normal()
@@ -374,6 +374,10 @@ func logica_ground_pound(delta: float) -> void:
 		animaciones.frame = 3
 
 	if recuperando_gp:
+		if not is_on_floor():
+			recuperando_gp = false
+			hitbox_ataque.disabled = false
+			return
 		velocity = Vector2.ZERO
 		return
 
@@ -390,9 +394,10 @@ func logica_ground_pound(delta: float) -> void:
 		recuperando_gp = true
 		hitbox_ataque.disabled = true 
 		await get_tree().create_timer(0.2).timeout
-		recuperando_gp = false
-		timer_super_salto = VENTANA_SALTO_POTENTE
-		cambiar_estado(Estado.IDLE, true)
+		if estado_actual == Estado.GROUND_POUND and recuperando_gp:
+			recuperando_gp = false
+			timer_super_salto = VENTANA_SALTO_POTENTE
+			cambiar_estado(Estado.IDLE, true)
 
 func logica_dive() -> void:
 	if is_on_floor(): 
@@ -401,90 +406,45 @@ func logica_dive() -> void:
 		velocity.x = -dir_accion * 50
 		cambiar_estado(Estado.CAYENDO, true)
 
-# #########################################################
-# 7. COMBATE, DAÑO Y VIDA
-# #########################################################
 func iniciar_accion(anim: String) -> void:
 	animaciones.play(anim)
 	hitbox_ataque.disabled = false 
 	if not animaciones.animation_finished.is_connected(_on_anim_finished):
 		animaciones.animation_finished.connect(_on_anim_finished, CONNECT_ONE_SHOT)
 
-func recibir_daño(cantidad: int, origen_daño_x: float, es_proyectil: bool = false):
+func recibir_daño(cantidad: int = 1, origen_daño_x: float = 0.0, es_proyectil: bool = false):
 	if es_invulnerable or estado_actual == Estado.MUERTO: return
-	
-	if estado_actual == Estado.DASH and not es_proyectil:
-		return
-	
-	vida_actual -= cantidad
-	cambio_vida.emit(vida_actual)
-	print("Auch! Vida restante: ", vida_actual)
-	
-	if vida_actual <= 0:
-		morir()
-	else:
-		estado_actual = Estado.HERIDO
-		
-		if animaciones.sprite_frames.has_animation("Herido"):
-			animaciones.play("Herido")
-		else:
-			animaciones.play("IDLE")
-			animaciones.modulate = Color.RED
-		
-		var dir_empuje = -1 if origen_daño_x > global_position.x else 1
-		velocity.x = dir_empuje * FUERZA_RETROCESO_DAÑO.x
-		velocity.y = FUERZA_RETROCESO_DAÑO.y
-
-		es_invulnerable = true
-		await get_tree().create_timer(0.5).timeout
-		es_invulnerable = false
-		
-		if vida_actual > 0:
-			estado_actual = Estado.IDLE
-			animaciones.modulate = Color.WHITE
+	if estado_actual == Estado.PARRY and es_proyectil: return
+	if estado_actual == Estado.DASH and not es_proyectil: return
+	morir()
 			
 func morir():
 	if estado_actual == Estado.MUERTO: return
-	estado_actual = Estado.MUERTO
-	print("¡JUGADOR MUERTO!")
 	
+	cambiar_estado(Estado.MUERTO, true)
 	vida_actual -= 1
 	cambio_vida.emit(vida_actual)
-	print("Vidas restantes: ", vida_actual)
 	
 	velocity = Vector2.ZERO
-	if animaciones.sprite_frames.has_animation("Muerte"):
-		animaciones.play("Muerte")
-	else:
-		animaciones.stop()
+	if animaciones.sprite_frames.has_animation("Muerte"): animaciones.play("Muerte")
+	else: animaciones.stop()
 	
-	collision_mask = 0 
 	await get_tree().create_timer(1.0).timeout
-	if vida_actual > 0:
-		respawn()
-	else:
-		game_over_total()
+	if vida_actual > 0: respawn()
+	else: game_over_total()
 
 func respawn():
 	velocity = Vector2.ZERO
 	global_position = posicion_inicio
-	collision_mask = mask_original
-	
 	estado_actual = Estado.IDLE
 	animaciones.play("IDLE")
 	animaciones.modulate = Color.WHITE
 	es_invulnerable = false
-	
-	print("¡JUGADOR REVIVIDO!")
 
 func game_over_total():
-	print("GAME OVER - MOSTRANDO PANTALLA")
 	juego_terminado.emit()
 	esperando_reinicio = true
 
-# #########################################################
-# 8. SEÑALES (CALLBACKS)
-# #########################################################
 func _on_anim_finished():
 	hitbox_ataque.disabled = true 
 	if estado_actual in [Estado.ATACANDO]:
@@ -492,21 +452,15 @@ func _on_anim_finished():
 
 func _on_hitbox_ataque_body_entered(body):
 	if body.is_in_group("rompible"):
-		if estado_actual == Estado.ATACANDO or estado_actual == Estado.DASH or estado_actual == Estado.GROUND_POUND:
-			print("¡Rompiendo viga!")
-			if body.has_method("romper"):
-				body.romper()
-			else:
-				body.queue_free()
+		if estado_actual in [Estado.ATACANDO, Estado.DASH, Estado.GROUND_POUND]:
+			if body.has_method("romper"): body.romper()
+			else: body.queue_free()
 				
 	elif body.is_in_group("enemigo"):
 		if estado_actual in [Estado.DASH, Estado.ATACANDO, Estado.GROUND_POUND]:
-			print("¡Enemigo destruido!")
-			if body.has_method("morir"):
-				body.morir()
-			else:
-				body.queue_free()
-				
+			if body.has_method("morir"): body.morir()
+			else: body.queue_free()
+			
 			if estado_actual == Estado.GROUND_POUND:
 				hitbox_ataque.disabled = true
 				cambiar_estado(Estado.SALTANDO, true)

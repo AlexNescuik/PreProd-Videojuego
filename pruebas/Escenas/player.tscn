@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dy8aqb8qhqdqq" path="res://Assets/Sprites/Relámpago jr/agarrarrr.png" id="7_ohiiw"]
 [ext_resource type="Texture2D" uid="uid://dudbrx0h85uel" path="res://Assets/Sprites/Relámpago jr/L_Muertez.png" id="7_ul4kv"]
 [ext_resource type="Texture2D" uid="uid://de6fqgeb656jy" path="res://Assets/Sprites/Relámpago jr/L_PeterGriffinPose.png" id="9_knqkl"]
+[ext_resource type="Texture2D" uid="uid://l8oehxmonu3u" path="res://Assets/Sprites/Relámpago jr/Parry.png" id="11_oba5i"]
 [ext_resource type="Texture2D" uid="uid://bwqujerg3qifl" path="res://Assets/Sprites/Relámpago jr/tacleo.png" id="11_ul4kv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ohiiw"]
@@ -79,6 +80,14 @@ region = Rect2(0, 0, 16, 20)
 [sub_resource type="AtlasTexture" id="AtlasTexture_el7rh"]
 atlas = ExtResource("7_ul4kv")
 region = Rect2(0, 0, 16, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r84g6"]
+atlas = ExtResource("11_oba5i")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwk6x"]
+atlas = ExtResource("11_oba5i")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1qdr"]
 atlas = ExtResource("6_7v5l4")
@@ -202,6 +211,17 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_r84g6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwk6x")
+}],
+"loop": true,
+"name": &"Parry",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_k1qdr")
 }],
 "loop": false,
@@ -228,20 +248,21 @@ radius = 5.0
 height = 18.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul4kv"]
-size = Vector2(16, 16)
+size = Vector2(20, 20.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xlwfv"]
-size = Vector2(12, 16.5)
+size = Vector2(20, 21)
 
 [node name="Player" type="CharacterBody2D" unique_id=1066533691]
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_qgqwx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
 position = Vector2(-1, -9.25)
 scale = Vector2(0.875, 0.875)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"Caminado"
+animation = &"Bomba"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(-1, -9)
@@ -249,21 +270,22 @@ shape = SubResource("CapsuleShape2D_qgqwx")
 debug_color = Color(1.92523e-06, 0.6512661, 0.055385932, 0.41960785)
 
 [node name="HitboxAtaque" type="Area2D" parent="." unique_id=1803091536]
-collision_layer = 3
-collision_mask = 7
+collision_layer = 0
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAtaque" unique_id=1129082636]
-position = Vector2(-1, -9)
+position = Vector2(-1, -8.25)
 shape = SubResource("RectangleShape2D_ul4kv")
 disabled = true
+debug_color = Color(0.9626917, 0, 0.5059066, 0.41960785)
 
 [node name="HurtboxJugador" type="Area2D" parent="." unique_id=1981073962]
 position = Vector2(1, 0)
-collision_layer = 3
-collision_mask = 3
+collision_layer = 0
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxJugador" unique_id=1991530863]
-position = Vector2(-2, -9)
+position = Vector2(-2, -8.5)
 shape = SubResource("RectangleShape2D_xlwfv")
 disabled = true
 debug_color = Color(0.65882355, 0.5176471, 0, 0.5372549)

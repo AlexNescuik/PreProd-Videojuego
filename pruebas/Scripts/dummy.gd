@@ -2,9 +2,16 @@ extends CharacterBody2D
 
 const GRAVEDAD = 980.0
 
+# Asegúrate de que tu nodo Area2D se llame exactamente "HitboxDaño"
+@onready var hitbox_dano = $HitboxDaño 
+
 func _ready():
 	if not is_in_group("enemigo"):
 		add_to_group("enemigo")
+		
+	# Conectamos la señal mágicamente por código. ¡Cero bugs del editor!
+	if hitbox_dano and not hitbox_dano.body_entered.is_connected(_al_tocar_jugador):
+		hitbox_dano.body_entered.connect(_al_tocar_jugador)
 
 func _physics_process(delta):
 	if not is_on_floor():
@@ -12,18 +19,23 @@ func _physics_process(delta):
 	move_and_slide()
 
 func morir():
-	print("Enemigo destruido")
+	print("¡PUM! Dummy destruido.")
 	queue_free()
 
-# ---------------------------------------------------------
-# Tu señal conectada debería verse así:
-# ---------------------------------------------------------
-func _on_hitbox_daño_body_entered(body):
-	if body.has_method("recibir_daño") and body.has_method("morir"):
+func _al_tocar_jugador(body):
+	# Si lo que nos tocó tiene la función morir (o sea, es tu Jugador)
+	if body.has_method("morir"):
+		var esta_a_salvo = false
 		
-		var esta_rodando = body.es_invulnerable
-		var esta_dasheando = (body.estado_actual == body.Estado.DASH)
-		
-		if not esta_rodando and not esta_dasheando:
-			print("Enemigo lastimó")
+		# ¿Está rodando?
+		if "es_invulnerable" in body and body.es_invulnerable:
+			esta_a_salvo = true
+			
+		# ¿Está en Dash?
+		if "estado_actual" in body and "Estado" in body and body.estado_actual == body.Estado.DASH:
+			esta_a_salvo = true
+			
+		# Si caminó normal hacia nosotros...
+		if not esta_a_salvo:
+			print("¡Instant Kill! El Dummy tocó al jugador.")
 			body.morir()
