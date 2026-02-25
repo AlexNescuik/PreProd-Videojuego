@@ -148,7 +148,27 @@ func _physics_process(delta: float) -> void:
 	
 	verificar_inputs_especiales()
 
-
+	var todas_las_balas = get_tree().get_nodes_in_group("bala")
+	for bala in todas_las_balas:
+		if global_position.distance_to(bala.global_position) < 5.0:
+			
+			if estado_actual == Estado.PARRY:
+				if not bala.fue_desviado:
+					print("Parry bien")
+					bala.direccion *= -1
+					bala.fue_desviado = true
+					bala.modulate = Color(0.617, 2.0, 0.566, 1.0)
+			
+			else:
+				var a_salvo = false
+				if es_invulnerable: a_salvo = true #Dodge Roll 
+				if estado_actual == Estado.DASH: a_salvo = true #Dash 
+				
+				if not a_salvo and not bala.fue_desviado and estado_actual != Estado.MUERTO:
+					print("impacto de bala")
+					bala.queue_free()
+					morir()
+					break
 
 func leer_inputs() -> void:
 	if estado_actual == Estado.MUERTO: 

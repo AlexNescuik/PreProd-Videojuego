@@ -1,8 +1,9 @@
 extends Area2D
 
-@export var velocidad: float = 300.0
+@export var velocidad: float = 100.0
 var direccion: Vector2 = Vector2.LEFT
 var fue_desviado: bool = false
+var tiempo_vida: float = 0.0 
 
 func _ready():
 	set_collision_layer_value(1, false)
@@ -12,9 +13,14 @@ func _ready():
 	set_collision_mask_value(1, true) # Ve Paredes
 	set_collision_mask_value(2, true) # Ve Jugador
 	set_collision_mask_value(3, true) # Ve Enemigos
+	
+	add_to_group("bala")
 
 func _physics_process(delta):
 	position += direccion * velocidad * delta
+	tiempo_vida += delta
+	if tiempo_vida > 3.0:
+		queue_free()
 	
 	var cuerpos_tocando = get_overlapping_bodies()
 	
