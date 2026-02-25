@@ -23,7 +23,8 @@ position = Vector2(10.5, -9.5)
 shape = SubResource("RectangleShape2D_suh7a")
 
 [node name="HitboxDaño" type="Area2D" parent="." unique_id=199283006 groups=["enemigo"]]
-collision_mask = 3
+collision_layer = 7
+collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxDaño" unique_id=695212716]
 position = Vector2(11, -10)

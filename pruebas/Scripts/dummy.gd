@@ -15,20 +15,20 @@ func morir():
 	print("¡Dummy destruido!")
 	queue_free()
 
-func _on_hitbox_daño_area_entered(area):
-	print("🚨 LA HITBOX DETECTÓ UN ÁREA: ", area.name)
-	
-	var jugador = area.get_parent()
-	
-	if jugador and jugador.has_method("morir"):
-		var esta_en_barrido = false
-		var esta_en_dash = false
+
+func _on_hitbox_daño_body_entered(body):
+	if body.has_method("morir") and body.name != self.name:
 		
-		if "es_invulnerable" in jugador:
-			esta_en_barrido = jugador.es_invulnerable
-		if "estado_actual" in jugador and "Estado" in jugador:
-			esta_en_dash = (jugador.estado_actual == jugador.Estado.DASH)
-			
-		if not esta_en_barrido and not esta_en_dash:
-			print("💀 ¡Hurtbox alcanzada! Muerte instantánea.")
-			jugador.morir()
+		var a_salvo = false
+		
+		if "es_invulnerable" in body and body.es_invulnerable:
+			a_salvo = true # El Barrido
+		if "estado_actual" in body and "Estado" in body:
+			if body.estado_actual == body.Estado.DASH:
+				a_salvo = true # El Dash
+			if body.estado_actual == body.Estado.PARRY:
+				a_salvo = true # Por si te choca mientras haces parry
+				
+		if not a_salvo:
+			print("¡El Dummy copió a la bala y te hizo Instant Kill!")
+			body.morir()

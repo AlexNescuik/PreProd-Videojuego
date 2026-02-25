@@ -5,43 +5,50 @@ var direccion: Vector2 = Vector2.LEFT
 var fue_desviado: bool = false
 
 func _ready():
-	set_collision_mask_value(1, true) 
-	set_collision_mask_value(2, true)
-	set_collision_mask_value(3, true)
-
-	if not body_entered.is_connected(_al_chocar):
-		body_entered.connect(_al_chocar)
+	set_collision_layer_value(1, false)
+	set_collision_layer_value(2, false)
+	set_collision_layer_value(3, true) 
+	
+	set_collision_mask_value(1, true) # Ve Paredes
+	set_collision_mask_value(2, true) # Ve Jugador
+	set_collision_mask_value(3, true) # Ve Enemigos
 
 func _physics_process(delta):
 	position += direccion * velocidad * delta
-
-func _al_chocar(body: Node2D):
-	print("🔍 La bala tocó a: ", body.name) 
 	
-	if body.is_in_group("jugador") or body.has_method("morir"):
-		var esta_en_barrido = false
-		var esta_en_dash = false
+	var cuerpos_tocando = get_overlapping_bodies()
+	
+	for body in cuerpos_tocando:
 		
-		if "es_invulnerable" in body: esta_en_barrido = body.es_invulnerable
-		if "estado_actual" in body and "Estado" in body: esta_en_dash = (body.estado_actual == body.Estado.DASH)
-		
-		if esta_en_barrido: 
+		if body.get_collision_layer_value(1):
+			print("🧱 Bala destruida por una pared.")
+			queue_free()
 			return 
 			
-		if "estado_actual" in body and body.estado_actual == body.Estado.PARRY:
-			print("🛡️ ¡PARRY PERFECTO! La bala rebota.")
-			direccion *= -1 
-			fue_desviado = true
-			modulate = Color(0, 2, 0)
-			return
-
-		if not fue_desviado:
-			print("Proyectil mató al jugador")
-			body.morir()
-			queue_free()
-
-	elif body.is_in_group("enemigo") and fue_desviado:
-		if body.has_method("morir"):
-			print("Mataste por rebote")
-			body.morir()
-		queue_free()
+		if body.is_in_group("jugador") or body.has_method("morir"):
+			var esta_en_barrido = false
+			
+			if "es_invulnerable" in body: esta_en_barrido = body.es_invulnerable
+			if esta_en_barrido:
+				continue
+				
+			if "estado_actual" in body and body.estado_actual == body.Estado.PARRY:
+				if not fue_desviado:
+					print("🛡️ ¡PARRY ÉPICO! La bala regresa.")
+					direccion *= -1 # Invierte el vuelo
+					fue_desviado = true
+					modulate = Color(0, 2, 0) # Se pinta de verde aliado
+				continue
+				
+			if not fue_desviado:
+				print("💀 ¡La bala te alcanzó!")
+				body.morir()
+				queue_free()
+				return
+				
+		if body.is_in_group("enemigo") and fue_desviado:
+			if body.has_method("morir"):
+				print("💥 ¡Enemigo destruido por su propia bala!")
+				body.morir()
+				queue_free()
+				return

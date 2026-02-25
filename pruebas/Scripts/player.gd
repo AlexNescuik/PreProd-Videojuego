@@ -131,8 +131,24 @@ func _physics_process(delta: float) -> void:
 		Estado.PARRY:         logica_parry(delta)
 		Estado.ATURDIDO:      logica_aturdido(delta)
 
-	move_and_slide()
+	move_and_slide()	
+	for i in get_slide_collision_count():
+		var choque = get_slide_collision(i).get_collider()
+		
+		if choque and choque.is_in_group("enemigo"):
+			var a_salvo = false
+			if es_invulnerable: a_salvo = true #barrido
+			if estado_actual == Estado.DASH: a_salvo = true # dash
+			if estado_actual == Estado.PARRY: a_salvo = true #parry
+			
+			if not a_salvo and estado_actual != Estado.MUERTO:
+				print("contacto enemigo")
+				morir()
+				break
+	
 	verificar_inputs_especiales()
+
+
 
 func leer_inputs() -> void:
 	if estado_actual == Estado.MUERTO: 

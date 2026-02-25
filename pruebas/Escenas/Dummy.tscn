@@ -10,7 +10,8 @@ size = Vector2(13, 13)
 size = Vector2(20, 18)
 
 [node name="Dummy" type="CharacterBody2D" unique_id=319906661 groups=["enemigo"]]
-collision_layer = 4
+collision_layer = 7
+collision_mask = 7
 script = ExtResource("1_suh7a")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1254813886]
@@ -26,7 +27,7 @@ shape = SubResource("RectangleShape2D_suh7a")
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxDaño" unique_id=695212716]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxDaño" unique_id=695212716 groups=["enemigo"]]
 position = Vector2(11, -10)
 shape = SubResource("RectangleShape2D_lrgmp")
 disabled = true
