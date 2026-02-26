@@ -29,15 +29,15 @@ const TIEMPO_BUFFER_SALTO = 0.1
 const VEL_GROUND_POUND      = 600.0 
 const VEL_DESLIZAMIENTO     = 50.0
 const REBOTE_PARED_X        = 100.0
-const TIEMPO_BLOQUEO_WALLJUMP = 0.25 
+const TIEMPO_BLOQUEO_WALLJUMP = 0.5 
 const VEL_DIVE_X            = 200.0 
 const VEL_DIVE_Y            = -200.0 
 const PAUSA_ANTICIPACION     = 0.3 
 const VENTANA_SALTO_POTENTE  = 0.2 
 const TIEMPO_MAX_DASH        = 0.3
 const TIEMPO_MAX_ROLL        = 0.2 
-const TIEMPO_MAX_PARRY       = 0.4 
-const TIEMPO_MAX_ATURDIDO    = 0.4 
+const TIEMPO_MAX_PARRY       = 0.6 
+const TIEMPO_MAX_ATURDIDO    = 0.3 
 
 #SISTEMA VIDA
 @export_group("Combate y Vida")
