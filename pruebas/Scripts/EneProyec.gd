@@ -5,7 +5,7 @@ const GRAVEDAD = 980.0
 @export_group("Combate y Visión")
 @export var escena_bala : PackedScene
 @export var tiempo_disparo: float = 2.0
-@export var radio_deteccion: float = 180.0 #
+@export var radio_deteccion: float = 170.0 #
 
 var timer_disparo: float = 0.0
 var jugador_referencia : Node2D
