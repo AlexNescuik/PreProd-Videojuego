@@ -25,7 +25,7 @@ const TIEMPO_BUFFER_SALTO = 0.1
 #MOVIMIENTOS ESPECIALES
 @export_group("Especiales")
 const VEL_GROUND_POUND      = 200.0 
-const VEL_DESLIZAMIENTO     = 50.0
+const VEL_DESLIZAMIENTO     = 300.0
 const REBOTE_PARED_X        = 230.0
 const TIEMPO_BLOQUEO_WALLJUMP = 0.5 
 const PAUSA_ANTICIPACION     = 0.3 

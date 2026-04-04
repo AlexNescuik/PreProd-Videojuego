@@ -435,8 +435,7 @@ script = ExtResource("1_qgqwx")
 position = Vector2(4.5625, -14.8125)
 scale = Vector2(1.0598959, 1.0598959)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"Bomba"
-frame = 2
+animation = &"IDLE"
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(3, -12)
