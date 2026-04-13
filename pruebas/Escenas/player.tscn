@@ -293,7 +293,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Caida",
-"speed": 10.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -391,7 +391,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Pared",
-"speed": 7.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -405,7 +405,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Saltar",
-"speed": 10.0
+"speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qgqwx"]
@@ -435,7 +435,9 @@ script = ExtResource("1_qgqwx")
 position = Vector2(4.5625, -14.8125)
 scale = Vector2(1.0598959, 1.0598959)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"IDLE"
+animation = &"Pared"
+frame = 3
+frame_progress = 1.0
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(3, -12)

@@ -11,7 +11,7 @@ enum Estado { IDLE, MOVIENDO, SALTANDO, CAYENDO, ATACANDO, BARRIDO, PARED, GROUN
 #MOVILIDAD BÁSICA HORIZONTAL
 @export_group("Movimiento Horizontal")
 const VEL_MOVIMIENTO    = 300.0 
-const VEL_BARRIDO       = 380.0 
+const VEL_BARRIDO       = 400.0 
 
 #MOVILIDAD BÁSICA VERTICAL
 @export_group("Salto y Gravedad")
@@ -24,14 +24,15 @@ const TIEMPO_BUFFER_SALTO = 0.1
 
 #MOVIMIENTOS ESPECIALES
 @export_group("Especiales")
-const VEL_GROUND_POUND      = 200.0 
+const VEL_GROUND_POUND      = 490.0 
 const VEL_DESLIZAMIENTO     = 300.0
 const REBOTE_PARED_X        = 230.0
-const TIEMPO_BLOQUEO_WALLJUMP = 0.5 
-const PAUSA_ANTICIPACION     = 0.3 
+const TIEMPO_BLOQUEO_WALLJUMP = 0.5
+const PAUSA_ANTICIPACION     = 0.1 
 const VENTANA_SALTO_POTENTE  = 0.2 
 const TIEMPO_MAX_BARRIDO     = 0.3
 const TIEMPO_MAX_ATURDIDO    = 0.2
+const VEL_MAX_CAIDA          = 100.0
 
 #SISTEMA VIDA
 @export_group("Combate y Vida")
@@ -109,11 +110,10 @@ func _physics_process(delta: float) -> void:
 	actualizar_timers(delta)
 	procesar_gravedad(delta)
 	
-	if is_on_floor():
+	if is_on_floor() and velocity.y >= 0:
 		coyote_timer = TIEMPO_COYOTE
 		timer_wall_jump = 0 
 		
-		# Simplificado: Ya no evalúa input_corre, solo si soltaste el botón abajo
 		if estado_actual != Estado.BARRIDO and not Input.is_action_pressed("ui_down"):
 			bloqueo_barrido = false
 	
@@ -122,7 +122,7 @@ func _physics_process(delta: float) -> void:
 		Estado.MOVIENDO:      logica_movimiento(delta)
 		Estado.SALTANDO, \
 		Estado.CAYENDO:       logica_aire(delta)
-		Estado.ATACANDO:      pass 
+		Estado.ATACANDO:      logica_atacando()
 		Estado.BARRIDO:       logica_barrido(delta)
 		Estado.PARED:         logica_pared() 
 		Estado.GROUND_POUND:  logica_ground_pound(delta)
@@ -178,11 +178,12 @@ func actualizar_timers(delta: float) -> void:
 	if timer_wall_jump > 0:   timer_wall_jump -= delta
 
 func procesar_gravedad(delta):
-	if not is_on_floor() and estado_actual != Estado.PARED:
+	if not is_on_floor():
 		if estado_actual == Estado.GROUND_POUND: 
 			return
 		else: 
 			velocity.y += GRAVEDAD * delta
+			velocity.y = min(velocity.y, VEL_MAX_CAIDA)
 
 func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	if estado_actual == nuevo: return
@@ -193,9 +194,6 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	animaciones.speed_scale = 1.0
 	hitbox_ataque.disabled = true 
 	
-	# ==========================================
-	# AL SALIR DEL BARRIDO: Restauramos las cajas normales
-	# ==========================================
 	if estado_actual == Estado.BARRIDO:
 		set_collision_mask_value(3, true)
 		es_invulnerable = false
@@ -214,10 +212,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			hitbox_ataque.disabled = true 
 			set_collision_mask_value(3, false)
 			animaciones.play("Barrido") 
-			
-			# ==========================================
-			# AL ENTRAR AL BARRIDO: Activamos las cajas chaparritas
-			# ==========================================
+
 			colision_normal.set_deferred("disabled", true)
 			hurtbox_normal.set_deferred("disabled", true)
 			colision_barrido.set_deferred("disabled", false)
@@ -241,6 +236,13 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			iniciar_accion("Ataque")
 
 func verificar_inputs_especiales() -> void:
+	if Input.is_action_just_pressed("Ataque") and not is_on_floor():
+		var puede_hacer_gp = estado_actual in [Estado.SALTANDO, Estado.CAYENDO, Estado.PARED]
+		if puede_hacer_gp:
+			timer_wall_jump = 0
+			cambiar_estado(Estado.GROUND_POUND)
+			return
+
 	if timer_wall_jump > 0: return
 
 	if estado_actual == Estado.GROUND_POUND:
@@ -253,16 +255,12 @@ func verificar_inputs_especiales() -> void:
 		cambiar_estado(Estado.SALTANDO)
 		return
 
-	# Simplificado: Solo requieres estar en el suelo y apretar Abajo
 	if is_on_floor() and Input.is_action_just_pressed("ui_down") and not bloqueo_barrido:
 		cambiar_estado(Estado.BARRIDO)
 		return
 
-	if Input.is_action_just_pressed("Ataque"):
-		if not is_on_floor(): 
-			cambiar_estado(Estado.GROUND_POUND)
-		else: 
-			cambiar_estado(Estado.ATACANDO)
+	if Input.is_action_just_pressed("Ataque") and is_on_floor():
+		cambiar_estado(Estado.ATACANDO)
 
 func ejecutar_salto() -> void:
 	if timer_wall_jump > 0:
@@ -318,13 +316,17 @@ func logica_aire(delta: float) -> void:
 	if not es_salto_potenciado and Input.is_action_just_released("Saltar") and velocity.y < -50:
 		velocity.y *= MULT_CORTE_SALTO
 	
-	if is_on_floor():
+	if is_on_floor() and velocity.y >= 0:
 		es_salto_potenciado = false
 		cambiar_estado(Estado.IDLE if input_dir == 0 else Estado.MOVIENDO, true)
 	elif is_on_wall_only() and velocity.y > 0:
 		var n = get_wall_normal()
 		if (n.x < 0 and input_dir > 0) or (n.x > 0 and input_dir < 0): 
 			cambiar_estado(Estado.PARED, true)
+
+func logica_atacando() -> void:
+	if is_on_floor():
+		velocity.x = 0
 
 func logica_barrido(delta: float) -> void:
 	velocity.x = dir_accion * VEL_BARRIDO
@@ -345,14 +347,17 @@ func logica_pared():
 	var n = get_wall_normal()
 	var presionando_hacia_pared = (n.x < 0 and input_dir > 0) or (n.x > 0 and input_dir < 0)
 	
-	if not presionando_hacia_pared or not is_on_wall() or is_on_floor():
+	if not is_on_wall() or is_on_floor():
 		cambiar_estado(Estado.CAYENDO, true)
 		return
 	
 	velocity.y = min(velocity.y, VEL_DESLIZAMIENTO)
-	animaciones.play("Pared")
-	if n.x != 0: animaciones.flip_h = (n.x > 0)
+	if animaciones.animation != "Pared":
+		animaciones.play("Pared")
 	
+	if animaciones.animation == "Pared" and animaciones.frame == 3:
+		animaciones.pause()
+	if n.x != 0: animaciones.flip_h = (n.x > 0)
 	if jump_buffer_timer > 0:
 		velocity.x = n.x * REBOTE_PARED_X
 		timer_wall_jump = TIEMPO_BLOQUEO_WALLJUMP

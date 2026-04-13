@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://b1gd32a7bebhe" path="res://Assets/TileMaps/TileSet comprado/mp_cs_buildings.png" id="1_eta54"]
 [ext_resource type="Texture2D" uid="uid://c0o0nsvvvtixl" path="res://Assets/Sprites/TileSet comprado/mp_cs_background.png" id="2_d327g"]
 [ext_resource type="PackedScene" uid="uid://ct57jbgxg13py" path="res://Escenas/player.tscn" id="2_ktres"]
-[ext_resource type="PackedScene" uid="uid://456s3m7fpe8j" path="res://Escenas/Dummy.tscn" id="4_xklos"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fsvv"]
 texture = ExtResource("1_eta54")
@@ -858,14 +857,8 @@ tile_map_data = PackedByteArray("AAAAAP//AAAPAAgAAAABAP//AAAOAAgAAAACAP//AAAOAAg
 tile_set = SubResource("TileSet_5xvgr")
 
 [node name="Player" parent="." unique_id=1066533691 instance=ExtResource("2_ktres")]
-position = Vector2(-9, -20)
+position = Vector2(-9, -16)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528]
 position = Vector2(26, -22)
 zoom = Vector2(3.5, 3.5)
-
-[node name="Dummy" parent="." unique_id=319906661 instance=ExtResource("4_xklos")]
-position = Vector2(1184, -16)
-
-[node name="Dummy2" parent="." unique_id=2099333288 instance=ExtResource("4_xklos")]
-position = Vector2(782, -112)
