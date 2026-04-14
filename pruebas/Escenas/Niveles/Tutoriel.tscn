@@ -850,6 +850,11 @@ physics_layer_0/collision_mask = 3
 sources/0 = SubResource("TileSetAtlasSource_2fsvv")
 sources/1 = SubResource("TileSetAtlasSource_xklos")
 
+[sub_resource type="GDScript" id="GDScript_d327g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d327g"]
+size = Vector2(563, 438)
+
 [node name="DEMO" type="Node2D" unique_id=297642043]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=835693478]
@@ -859,6 +864,25 @@ tile_set = SubResource("TileSet_5xvgr")
 [node name="Player" parent="." unique_id=1066533691 instance=ExtResource("2_ktres")]
 position = Vector2(-9, -16)
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528]
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528 groups=["jugador"]]
 position = Vector2(26, -22)
 zoom = Vector2(3.5, 3.5)
+
+[node name="Salas" type="Node2D" parent="." unique_id=336128692]
+
+[node name="S0" type="Node2D" parent="Salas" unique_id=2034415634]
+script = SubResource("GDScript_d327g")
+
+[node name="Area2D" type="Area2D" parent="Salas/S0" unique_id=1257661271]
+position = Vector2(19, -130)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Salas/S0/Area2D" unique_id=1525008473]
+position = Vector2(39, 29)
+shape = SubResource("RectangleShape2D_d327g")
+debug_color = Color(0.26307634, 0.1793812, 0.22122876, 0.41960785)
+
+[node name="TopLeft" type="Node2D" parent="Salas/S0/Area2D" unique_id=562374499]
+position = Vector2(-242, -189)
+
+[node name="BottomRight" type="Node2D" parent="Salas/S0/Area2D" unique_id=272990116]
+position = Vector2(320, 248)

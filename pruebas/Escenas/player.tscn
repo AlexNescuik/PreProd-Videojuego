@@ -82,6 +82,10 @@ region = Rect2(96, 0, 48, 48)
 atlas = ExtResource("4_ohiiw")
 region = Rect2(144, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_el7rh"]
+atlas = ExtResource("4_ohiiw")
+region = Rect2(192, 0, 48, 48)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ul4kv"]
 atlas = ExtResource("11_oba5i")
 region = Rect2(144, 0, 48, 48)
@@ -178,10 +182,6 @@ region = Rect2(48, 0, 48, 48)
 atlas = ExtResource("9_ul4kv")
 region = Rect2(96, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_el7rh"]
-atlas = ExtResource("9_ul4kv")
-region = Rect2(144, 0, 48, 48)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ch4f"]
 atlas = ExtResource("10_oba5i")
 region = Rect2(0, 0, 48, 48)
@@ -209,6 +209,18 @@ region = Rect2(48, 0, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1qdr"]
 atlas = ExtResource("11_oba5i")
 region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohiiw"]
+atlas = ExtResource("11_oba5i")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5uw0"]
+atlas = ExtResource("11_oba5i")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fphui"]
+atlas = ExtResource("11_oba5i")
+region = Rect2(240, 0, 48, 48)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hqtel"]
 animations = [{
@@ -276,6 +288,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ldnir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_el7rh")
 }],
 "loop": false,
 "name": &"Bomba",
@@ -293,7 +308,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Caida",
-"speed": 7.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -368,11 +383,8 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vwnoe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_el7rh")
 }],
-"loop": true,
+"loop": false,
 "name": &"Muerte",
 "speed": 9.0
 }, {
@@ -402,10 +414,19 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k1qdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ohiiw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5uw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fphui")
 }],
 "loop": false,
 "name": &"Saltar",
-"speed": 5.0
+"speed": 8.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qgqwx"]
@@ -435,9 +456,7 @@ script = ExtResource("1_qgqwx")
 position = Vector2(4.5625, -14.8125)
 scale = Vector2(1.0598959, 1.0598959)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"Pared"
-frame = 3
-frame_progress = 1.0
+animation = &"Bomba"
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(3, -12)

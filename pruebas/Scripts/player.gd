@@ -24,15 +24,14 @@ const TIEMPO_BUFFER_SALTO = 0.1
 
 #MOVIMIENTOS ESPECIALES
 @export_group("Especiales")
-const VEL_GROUND_POUND      = 490.0 
-const VEL_DESLIZAMIENTO     = 300.0
+const VEL_GROUND_POUND      = 590.0 
+const VEL_DESLIZAMIENTO     = 100.0
 const REBOTE_PARED_X        = 230.0
 const TIEMPO_BLOQUEO_WALLJUMP = 0.5
 const PAUSA_ANTICIPACION     = 0.1 
 const VENTANA_SALTO_POTENTE  = 0.2 
 const TIEMPO_MAX_BARRIDO     = 0.3
 const TIEMPO_MAX_ATURDIDO    = 0.2
-const VEL_MAX_CAIDA          = 100.0
 
 #SISTEMA VIDA
 @export_group("Combate y Vida")
@@ -183,7 +182,6 @@ func procesar_gravedad(delta):
 			return
 		else: 
 			velocity.y += GRAVEDAD * delta
-			velocity.y = min(velocity.y, VEL_MAX_CAIDA)
 
 func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	if estado_actual == nuevo: return
@@ -300,22 +298,30 @@ func logica_movimiento(delta: float) -> void:
 @warning_ignore("unused_parameter")
 func logica_aire(delta: float) -> void:
 	if timer_wall_jump > 0:
-		animaciones.play("Saltar") 
+		if animaciones.animation != "Saltar":
+			animaciones.play("Saltar")
 		animaciones.flip_h = (velocity.x < 0)
 	else:
 		velocity.x = input_dir * VEL_MOVIMIENTO
 		
 		if input_dir != 0:
 			animaciones.flip_h = (input_dir < 0)
-			
 		if velocity.y < 0:
-			animaciones.play("Saltar")
+			if animaciones.animation != "Saltar":
+				animaciones.play("Saltar")
 		else:
-			animaciones.play("Caida")
-	
+			if animaciones.animation != "Caida":
+				animaciones.play("Caida")
+				
+	var anim_actual = animaciones.animation
+	if anim_actual in ["Saltar", "Caida"]:
+		var ultimo_frame = animaciones.sprite_frames.get_frame_count(anim_actual) - 1
+		if animaciones.frame == ultimo_frame:
+			animaciones.pause()
+			
 	if not es_salto_potenciado and Input.is_action_just_released("Saltar") and velocity.y < -50:
 		velocity.y *= MULT_CORTE_SALTO
-	
+		
 	if is_on_floor() and velocity.y >= 0:
 		es_salto_potenciado = false
 		cambiar_estado(Estado.IDLE if input_dir == 0 else Estado.MOVIENDO, true)
