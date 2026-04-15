@@ -407,7 +407,7 @@ func iniciar_accion(anim: String) -> void:
 	if not animaciones.animation_finished.is_connected(_on_anim_finished):
 		animaciones.animation_finished.connect(_on_anim_finished, CONNECT_ONE_SHOT)
 
-func recibir_daño(cantidad: int = 1, origen_daño_x: float = 0.0, es_proyectil: bool = false):
+func recibir_daño(cantidad: int = 1, _origen_daño_x: float = 0.0, es_proyectil: bool = false):
 	if es_invulnerable or estado_actual == Estado.MUERTO: return
 	if estado_actual == Estado.BARRIDO and not es_proyectil: return
 	morir()

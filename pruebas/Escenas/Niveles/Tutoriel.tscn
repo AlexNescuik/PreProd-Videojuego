@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://b1gd32a7bebhe" path="res://Assets/TileMaps/TileSet comprado/mp_cs_buildings.png" id="1_eta54"]
 [ext_resource type="Texture2D" uid="uid://c0o0nsvvvtixl" path="res://Assets/Sprites/TileSet comprado/mp_cs_background.png" id="2_d327g"]
 [ext_resource type="PackedScene" uid="uid://ct57jbgxg13py" path="res://Escenas/player.tscn" id="2_ktres"]
+[ext_resource type="Script" uid="uid://0a74w4kq3xcv" path="res://Scripts/Salas.gd" id="4_xklos"]
+[ext_resource type="PackedScene" uid="uid://456s3m7fpe8j" path="res://Escenas/Dummy.tscn" id="5_eta54"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fsvv"]
 texture = ExtResource("1_eta54")
@@ -850,10 +852,11 @@ physics_layer_0/collision_mask = 3
 sources/0 = SubResource("TileSetAtlasSource_2fsvv")
 sources/1 = SubResource("TileSetAtlasSource_xklos")
 
-[sub_resource type="GDScript" id="GDScript_d327g"]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d327g"]
 size = Vector2(563, 438)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xklos"]
+size = Vector2(544, 438.5)
 
 [node name="DEMO" type="Node2D" unique_id=297642043]
 
@@ -865,13 +868,14 @@ tile_set = SubResource("TileSet_5xvgr")
 position = Vector2(-9, -16)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528 groups=["jugador"]]
-position = Vector2(26, -22)
-zoom = Vector2(3.5, 3.5)
+position = Vector2(51, -56)
+zoom = Vector2(3.7, 3.7)
 
 [node name="Salas" type="Node2D" parent="." unique_id=336128692]
+visible = false
+script = ExtResource("4_xklos")
 
 [node name="S0" type="Node2D" parent="Salas" unique_id=2034415634]
-script = SubResource("GDScript_d327g")
 
 [node name="Area2D" type="Area2D" parent="Salas/S0" unique_id=1257661271]
 position = Vector2(19, -130)
@@ -881,8 +885,17 @@ position = Vector2(39, 29)
 shape = SubResource("RectangleShape2D_d327g")
 debug_color = Color(0.26307634, 0.1793812, 0.22122876, 0.41960785)
 
-[node name="TopLeft" type="Node2D" parent="Salas/S0/Area2D" unique_id=562374499]
-position = Vector2(-242, -189)
+[node name="S1" type="Node2D" parent="Salas" unique_id=424741072]
 
-[node name="BottomRight" type="Node2D" parent="Salas/S0/Area2D" unique_id=272990116]
-position = Vector2(320, 248)
+[node name="Area2D" type="Area2D" parent="Salas/S1" unique_id=1541770321]
+position = Vector2(603, -87)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Salas/S1/Area2D" unique_id=1530891046]
+position = Vector2(9, -14.25)
+shape = SubResource("RectangleShape2D_xklos")
+
+[node name="Dummy" parent="." unique_id=319906661 instance=ExtResource("5_eta54")]
+position = Vector2(819, -110)
+
+[node name="Dummy2" parent="." unique_id=1032773991 instance=ExtResource("5_eta54")]
+position = Vector2(1244, -13)
