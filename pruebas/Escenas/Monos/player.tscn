@@ -429,12 +429,12 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qgqwx"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ohiiw"]
 radius = 6.0
-height = 26.0
+height = 29.5
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_knqkl"]
-radius = 6.0
+radius = 5.0
 height = 32.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul4kv"]
@@ -453,24 +453,24 @@ collision_mask = 5
 script = ExtResource("1_qgqwx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
-position = Vector2(4.5625, -14.8125)
-scale = Vector2(1.0598959, 1.0598959)
+position = Vector2(22.999994, -60.250008)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"Bomba"
+animation = &"IDLE"
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
-position = Vector2(3, -12)
-shape = SubResource("CapsuleShape2D_qgqwx")
+position = Vector2(23, -59)
+shape = SubResource("CapsuleShape2D_ohiiw")
 debug_color = Color(1.92523e-06, 0.6512661, 0.055385932, 0.41960785)
 
 [node name="ColisionBarrido" type="CollisionShape2D" parent="." unique_id=2118810707]
-position = Vector2(6, -6)
+position = Vector2(25, -51)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_knqkl")
 disabled = true
 debug_color = Color(1.92523e-06, 0.6512661, 0.055385932, 0.41960785)
 
 [node name="HitboxAtaque" type="Area2D" parent="." unique_id=1803091536]
+visible = false
 collision_layer = 0
 collision_mask = 5
 
@@ -481,6 +481,7 @@ disabled = true
 debug_color = Color(0.9626917, 0, 0.5059066, 0.41960785)
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1981073962]
+visible = false
 position = Vector2(1, 0)
 collision_layer = 2
 collision_mask = 0

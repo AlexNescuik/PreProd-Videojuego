@@ -15,7 +15,7 @@ const VEL_BARRIDO       = 400.0
 
 #MOVILIDAD BÁSICA VERTICAL
 @export_group("Salto y Gravedad")
-const FUERZA_SALTO       = -300.0
+const FUERZA_SALTO       = -320.0
 const FUERZA_SALTO_SUPER = -380.0
 const GRAVEDAD           = 980.0
 const MULT_CORTE_SALTO   = 0.5

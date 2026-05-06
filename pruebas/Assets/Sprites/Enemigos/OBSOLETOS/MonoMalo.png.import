@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyxd0gep720n5"
-path="res://.godot/imported/proyectil.png-c74cac4108026c617702d29f75d1c033.ctex"
+uid="uid://djvssxftcut38"
+path="res://.godot/imported/MonoMalo.png-a5b95971589999b8a8d5f9ce9cda0ccb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Enemigos/proyectil.png"
-dest_files=["res://.godot/imported/proyectil.png-c74cac4108026c617702d29f75d1c033.ctex"]
+source_file="res://Assets/Sprites/Enemigos/OBSOLETOS/MonoMalo.png"
+dest_files=["res://.godot/imported/MonoMalo.png-a5b95971589999b8a8d5f9ce9cda0ccb.ctex"]
 
 [params]
 

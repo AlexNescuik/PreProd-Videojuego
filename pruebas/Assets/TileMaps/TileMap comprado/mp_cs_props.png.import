@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt6ugj6k375vj"
-path="res://.godot/imported/MonoProyectil.png-b85be2143edba41e791c03056ba6804a.ctex"
+uid="uid://f2d8ug7p5fhr"
+path="res://.godot/imported/mp_cs_props.png-b8f99e25c28c8d7750a5a61f956c3474.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Enemigos/MonoProyectil.png"
-dest_files=["res://.godot/imported/MonoProyectil.png-b85be2143edba41e791c03056ba6804a.ctex"]
+source_file="res://Assets/TileMaps/TileMap comprado/mp_cs_props.png"
+dest_files=["res://.godot/imported/mp_cs_props.png-b8f99e25c28c8d7750a5a61f956c3474.ctex"]
 
 [params]
 

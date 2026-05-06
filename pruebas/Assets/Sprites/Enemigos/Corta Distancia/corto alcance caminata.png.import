@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1x3r745c3dii"
-path="res://.godot/imported/mp_cs_vegetation.png-612ad9976276b3ce0da52be4a22502ae.ctex"
+uid="uid://bshaep3mk05i4"
+path="res://.godot/imported/corto alcance caminata.png-aa34b3604e61679e081015c7811975db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/TileMaps/TileSet comprado/mp_cs_vegetation.png"
-dest_files=["res://.godot/imported/mp_cs_vegetation.png-612ad9976276b3ce0da52be4a22502ae.ctex"]
+source_file="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance caminata.png"
+dest_files=["res://.godot/imported/corto alcance caminata.png-aa34b3604e61679e081015c7811975db.ctex"]
 
 [params]
 

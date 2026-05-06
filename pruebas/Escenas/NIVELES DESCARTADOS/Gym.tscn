@@ -1,10 +1,10 @@
 [gd_scene format=4 uid="uid://bsqpc4r2lr5s3"]
 
-[ext_resource type="PackedScene" uid="uid://ct57jbgxg13py" path="res://Escenas/player.tscn" id="1_vgqjp"]
-[ext_resource type="Texture2D" uid="uid://b1gd32a7bebhe" path="res://Assets/TileMaps/TileSet comprado/mp_cs_buildings.png" id="2_5g6cr"]
+[ext_resource type="PackedScene" uid="uid://ct57jbgxg13py" path="res://Escenas/Monos/player.tscn" id="1_vgqjp"]
+[ext_resource type="Texture2D" uid="uid://b1gd32a7bebhe" path="res://Assets/TileMaps/TileMap comprado/mp_cs_buildings.png" id="2_5g6cr"]
 [ext_resource type="PackedScene" uid="uid://bap73vm6qg80j" path="res://Escenas/Objetos/Teletransportador.tscn" id="3_yuy67"]
-[ext_resource type="PackedScene" uid="uid://456s3m7fpe8j" path="res://Escenas/Dummy.tscn" id="4_proai"]
-[ext_resource type="PackedScene" uid="uid://lxcme571bw5x" path="res://Escenas/EneProyec.tscn" id="5_pwf46"]
+[ext_resource type="PackedScene" uid="uid://456s3m7fpe8j" path="res://Escenas/Monos/Dummy.tscn" id="4_proai"]
+[ext_resource type="PackedScene" uid="uid://lxcme571bw5x" path="res://Escenas/Monos/EneProyec.tscn" id="5_pwf46"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fsvv"]
 texture = ExtResource("2_5g6cr")

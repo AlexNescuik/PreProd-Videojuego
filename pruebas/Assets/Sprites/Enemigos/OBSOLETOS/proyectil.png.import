@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5qxsj05kmj4l"
-path="res://.godot/imported/mp_cs_background.png-9b1b4bc02f72516f8da98f057a4383f7.ctex"
+uid="uid://dyxd0gep720n5"
+path="res://.godot/imported/proyectil.png-87fc2b7d70b79ce9af847232ea997074.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/TileMaps/TileSet comprado/mp_cs_background.png"
-dest_files=["res://.godot/imported/mp_cs_background.png-9b1b4bc02f72516f8da98f057a4383f7.ctex"]
+source_file="res://Assets/Sprites/Enemigos/OBSOLETOS/proyectil.png"
+dest_files=["res://.godot/imported/proyectil.png-87fc2b7d70b79ce9af847232ea997074.ctex"]
 
 [params]
 
