@@ -73,6 +73,9 @@ var jump_buffer_timer  : float = 0.0
 var tiempo_barrido_actual  : float = 0.0   
 var tiempo_aturdido_actual : float = 0.0
 
+# --- Lista Anti-Spam de Daño ---
+var enemigos_golpeados : Array = []
+
 # --- Banderas Condicionales (Flags) ---
 var es_salto_potenciado : bool = false
 var bloqueo_barrido     : bool = false 
@@ -128,21 +131,7 @@ func _physics_process(delta: float) -> void:
 		Estado.ATURDIDO:      logica_aturdido(delta)
 
 	move_and_slide() 
-	
-	for i in get_slide_collision_count():
-		var choque = get_slide_collision(i).get_collider()
-		
-		if choque and choque.is_in_group("enemigo"):
-			var a_salvo = false
-			
-			if es_invulnerable: a_salvo = true 
-			if estado_actual == Estado.BARRIDO: a_salvo = true 
-			
-			if not a_salvo and estado_actual != Estado.MUERTO:
-				print("player muerto")
-				morir()
-				break
-	# =========================================================
+	revisar_golpes()
 	
 	verificar_inputs_especiales()
 
@@ -193,7 +182,6 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	hitbox_ataque.disabled = true 
 	
 	if estado_actual == Estado.BARRIDO:
-		set_collision_mask_value(3, true)
 		es_invulnerable = false
 		colision_normal.set_deferred("disabled", false)
 		hurtbox_normal.set_deferred("disabled", false)
@@ -201,6 +189,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 		hurtbox_barrido.set_deferred("disabled", true)
 		
 	estado_actual = nuevo
+	enemigos_golpeados.clear() # Limpiamos la lista al iniciar un nuevo movimiento
 	
 	match estado_actual:
 		Estado.BARRIDO:
@@ -208,7 +197,6 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			dir_accion = -1 if animaciones.flip_h else 1
 			es_invulnerable = true
 			hitbox_ataque.disabled = true 
-			set_collision_mask_value(3, false)
 			animaciones.play("Barrido") 
 
 			colision_normal.set_deferred("disabled", true)
@@ -371,35 +359,40 @@ func logica_pared():
 		cambiar_estado(Estado.SALTANDO, true)
 
 func logica_ground_pound(delta: float) -> void:
-	if animaciones.animation == "Bomba" and animaciones.frame >= 3:
-		animaciones.pause()
-		animaciones.frame = 3
-
-	if recuperando_gp:
-		if not is_on_floor():
-			recuperando_gp = false
-			hitbox_ataque.disabled = false
-			return
-		velocity = Vector2.ZERO
-		return
+	if animaciones.sprite_frames.has_animation("Bomba"):
+		if animaciones.animation != "Bomba":
+			animaciones.play("Bomba")
+		
+		var ultimo = animaciones.sprite_frames.get_frame_count("Bomba") - 1
+		if animaciones.frame >= ultimo:
+			animaciones.pause()
+			animaciones.frame = ultimo
 
 	if timer_ground_pound > 0:
 		timer_ground_pound -= delta
 		velocity = Vector2.ZERO
 		return
 
+	if recuperando_gp:
+		velocity = Vector2.ZERO
+		if not is_on_floor():
+			recuperando_gp = false
+		return
+
 	velocity.x = 0
 	velocity.y = VEL_GROUND_POUND
-	hitbox_ataque.disabled = false 
+	hitbox_ataque.set_deferred("disabled", false)
 	
 	if is_on_floor():
+		velocity = Vector2.ZERO
 		recuperando_gp = true
-		hitbox_ataque.disabled = true 
-		await get_tree().create_timer(0.2).timeout
-		if estado_actual == Estado.GROUND_POUND and recuperando_gp:
-			recuperando_gp = false
-			timer_super_salto = VENTANA_SALTO_POTENTE
-			cambiar_estado(Estado.IDLE, true)
+		
+		await get_tree().create_timer(0.15).timeout 
+		
+		hitbox_ataque.set_deferred("disabled", true)
+		timer_super_salto = VENTANA_SALTO_POTENTE
+		cambiar_estado(Estado.IDLE, true)
+		recuperando_gp = false
 
 func iniciar_accion(anim: String) -> void:
 	animaciones.play(anim)
@@ -407,7 +400,7 @@ func iniciar_accion(anim: String) -> void:
 	if not animaciones.animation_finished.is_connected(_on_anim_finished):
 		animaciones.animation_finished.connect(_on_anim_finished, CONNECT_ONE_SHOT)
 
-func recibir_daño(cantidad: int = 1, _origen_daño_x: float = 0.0, es_proyectil: bool = false):
+func recibir_daño(_cantidad: int = 1, _origen_daño_x: float = 0.0, es_proyectil: bool = false):
 	if es_invulnerable or estado_actual == Estado.MUERTO: return
 	if estado_actual == Estado.BARRIDO and not es_proyectil: return
 	morir()
@@ -444,25 +437,38 @@ func _on_anim_finished():
 	if estado_actual in [Estado.ATACANDO]:
 		cambiar_estado(Estado.IDLE, true)
 
+# =========================================================
+# 4. FUNCIONES DE COMBATE Y SEÑALES
+# =========================================================
+
+func revisar_golpes():
+	if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:
+		for area in $HitboxAtaque.get_overlapping_areas():
+			if area.is_in_group("hurtbox_enemigo") and area.owner.has_method("morir"):
+				var enemigo = area.owner
+				
+				if not enemigo in enemigos_golpeados:
+					enemigos_golpeados.append(enemigo)
+					enemigo.morir()
+					
+					if estado_actual == Estado.GROUND_POUND:
+						hitbox_ataque.set_deferred("disabled", true)
+						cambiar_estado(Estado.SALTANDO, true)
+
+	elif estado_actual == Estado.BARRIDO:
+		for area in $Hurtbox.get_overlapping_areas():
+			if area.is_in_group("hurtbox_enemigo") and area.owner.has_method("morir"):
+				var enemigo = area.owner
+				
+				if not enemigo in enemigos_golpeados:
+					enemigos_golpeados.append(enemigo)
+					enemigo.morir()
+
 func _on_hitbox_ataque_body_entered(body):
 	if body.is_in_group("rompible"):
 		if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:
 			if body.has_method("romper"): body.romper()
 			else: body.queue_free()
-				
-	elif body.is_in_group("enemigo"):
-		if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:
-			if body.has_method("morir"): body.morir()
-			else: body.queue_free()
-			
-			if estado_actual == Estado.GROUND_POUND:
-				hitbox_ataque.disabled = true
-				cambiar_estado(Estado.SALTANDO, true)
 
-func _on_hurtbox_body_entered(body):
-	if body.is_in_group("enemigo"):
-		var esta_en_barrido = (estado_actual == Estado.BARRIDO)
-		
-		if not es_invulnerable and not esta_en_barrido:
-			print("¡Mi Hurtbox tocó al Dummy! Me muero AAA")
-			morir()
+func _on_hurtbox_body_entered(_body):
+	pass

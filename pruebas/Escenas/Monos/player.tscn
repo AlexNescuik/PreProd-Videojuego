@@ -438,18 +438,17 @@ radius = 5.0
 height = 32.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul4kv"]
-size = Vector2(17, 29)
+size = Vector2(30, 33.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xlwfv"]
-size = Vector2(17, 29.25)
+size = Vector2(16, 29.25)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_oba5i"]
-size = Vector2(27.75, 14.625)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ujgu7"]
+size = Vector2(32, 10)
 
 [node name="Player" type="CharacterBody2D" unique_id=1066533691 groups=["jugador"]]
 z_index = 10
 collision_layer = 2
-collision_mask = 5
 script = ExtResource("1_qgqwx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
@@ -470,31 +469,29 @@ disabled = true
 debug_color = Color(1.92523e-06, 0.6512661, 0.055385932, 0.41960785)
 
 [node name="HitboxAtaque" type="Area2D" parent="." unique_id=1803091536]
-visible = false
 collision_layer = 0
-collision_mask = 5
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAtaque" unique_id=1129082636]
-position = Vector2(2, -12.5)
+position = Vector2(22, -56.75)
 shape = SubResource("RectangleShape2D_ul4kv")
 disabled = true
 debug_color = Color(0.9626917, 0, 0.5059066, 0.41960785)
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1981073962]
-visible = false
 position = Vector2(1, 0)
-collision_layer = 2
-collision_mask = 0
+collision_layer = 0
+collision_mask = 4
 
 [node name="HurtboxNormal" type="CollisionShape2D" parent="Hurtbox" unique_id=1991530863]
-position = Vector2(1, -12.375)
+position = Vector2(21, -59)
 shape = SubResource("RectangleShape2D_xlwfv")
 disabled = true
 debug_color = Color(0.65882355, 0.5176471, 0, 0.5372549)
 
-[node name="HurtboxBarrido" type="CollisionShape2D" parent="Hurtbox" unique_id=1227267405]
-position = Vector2(5.125, -6.6875)
-shape = SubResource("RectangleShape2D_oba5i")
+[node name="HurtboxBarrido" type="CollisionShape2D" parent="Hurtbox" unique_id=2092644355]
+position = Vector2(24, -51)
+shape = SubResource("RectangleShape2D_ujgu7")
 disabled = true
 debug_color = Color(0.65882355, 0.5176471, 0, 0.5372549)
 

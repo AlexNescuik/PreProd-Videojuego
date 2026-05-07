@@ -183,44 +183,68 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tk5x6"]
-radius = 8.0
-height = 32.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tk5x6"]
-size = Vector2(80, 30)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tlc7"]
-size = Vector2(26, 16.75)
+size = Vector2(12, 2)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6tlc7"]
+radius = 55.00909
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_awfuy"]
+size = Vector2(27, 33)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_672mf"]
+size = Vector2(23, 33)
 
 [node name="EnemigoCorto" type="CharacterBody2D" unique_id=628822398 groups=["enemigo"]]
+collision_layer = 4
 script = ExtResource("1_6tlc7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1633052241]
 position = Vector2(2, -2)
 scale = Vector2(1.125, 1.125)
 sprite_frames = SubResource("SpriteFrames_vn1tc")
-animation = &"Idle"
+animation = &"Ataque"
+frame = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=572498304]
-position = Vector2(3, 0)
-shape = SubResource("CapsuleShape2D_tk5x6")
-debug_color = Color(0.99616796, 0, 0.20044702, 0.41960785)
-
-[node name="ZonaDeteccion" type="Area2D" parent="." unique_id=21813526]
-collision_layer = 7
-collision_mask = 7
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaDeteccion" unique_id=788642249]
-position = Vector2(3, -1)
-shape = SubResource("RectangleShape2D_tk5x6")
-debug_color = Color(0.99607843, 0, 0.19607843, 0.09411765)
-
-[node name="ZonaAtaque" type="Area2D" parent="." unique_id=1492526543]
-collision_layer = 3
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ZonaAtaque" unique_id=71157815]
-position = Vector2(3, -3)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1111974272]
+position = Vector2(2, 15)
 shape = SubResource("RectangleShape2D_6tlc7")
-disabled = true
+
+[node name="Pivote" type="Node2D" parent="." unique_id=82658043]
+
+[node name="RayoPared" type="RayCast2D" parent="Pivote" unique_id=1554175021]
+target_position = Vector2(26, 0)
+
+[node name="RayoSuelo" type="RayCast2D" parent="Pivote" unique_id=1600042541]
+target_position = Vector2(20, 20)
+
+[node name="ZonaVision" type="Area2D" parent="Pivote" unique_id=1255797546]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivote/ZonaVision" unique_id=68175988]
+position = Vector2(1, -7)
+shape = SubResource("CircleShape2D_6tlc7")
+debug_color = Color(0, 0.6, 0.69803923, 0.09019608)
+
+[node name="ZonaAtaque" type="Area2D" parent="Pivote" unique_id=728896614]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivote/ZonaAtaque" unique_id=1899902335]
+position = Vector2(2.5, -0.5)
+shape = SubResource("RectangleShape2D_awfuy")
+debug_color = Color(0.97573155, 0.13463551, 0.20832899, 0.41960785)
+
+[node name="HurtboxEnemigo" type="Area2D" parent="." unique_id=79704688 groups=["hurtbox_enemigo"]]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxEnemigo" unique_id=1234840579]
+position = Vector2(2.5, -0.5)
+shape = SubResource("RectangleShape2D_672mf")
+
+[connection signal="body_entered" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_entered"]
+[connection signal="body_exited" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_exited"]
+[connection signal="body_entered" from="Pivote/ZonaAtaque" to="." method="_on_zona_ataque_body_entered"]
+[connection signal="body_exited" from="Pivote/ZonaAtaque" to="." method="_on_zona_ataque_body_exited"]

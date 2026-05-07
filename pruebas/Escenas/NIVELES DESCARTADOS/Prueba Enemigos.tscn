@@ -721,11 +721,11 @@ sources/0 = SubResource("TileSetAtlasSource_2fsvv")
 [node name="DEMO" type="Node2D" unique_id=297642043]
 
 [node name="Player" parent="." unique_id=1066533691 instance=ExtResource("1_ywnjo")]
-position = Vector2(31, 43)
+position = Vector2(33, 44)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=639585039]
-position = Vector2(9, -22)
-zoom = Vector2(3, 3)
+position = Vector2(23, -65)
+zoom = Vector2(4, 4)
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
@@ -735,3 +735,5 @@ tile_set = SubResource("TileSet_5xvgr")
 
 [node name="EnemigoCorto" parent="." unique_id=1135753781 instance=ExtResource("2_dogdf")]
 position = Vector2(120, -16)
+collision_layer = 1
+collision_mask = 2
