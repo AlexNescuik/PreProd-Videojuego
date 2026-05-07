@@ -438,7 +438,7 @@ radius = 5.0
 height = 32.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul4kv"]
-size = Vector2(30, 33.5)
+size = Vector2(30, 35)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xlwfv"]
 size = Vector2(16, 29.25)
@@ -473,7 +473,7 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAtaque" unique_id=1129082636]
-position = Vector2(22, -56.75)
+position = Vector2(22, -58)
 shape = SubResource("RectangleShape2D_ul4kv")
 disabled = true
 debug_color = Color(0.9626917, 0, 0.5059066, 0.41960785)
