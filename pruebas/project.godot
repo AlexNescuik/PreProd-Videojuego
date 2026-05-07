@@ -29,6 +29,7 @@ folder_colors={
 "res://Assets/Sprites/": "purple",
 "res://Assets/Sprites/Enemigos/": "blue",
 "res://Assets/Sprites/Enemigos/Corta Distancia/": "teal",
+"res://Assets/Sprites/Enemigos/Kamikase/": "teal",
 "res://Assets/Sprites/Enemigos/Larga Distancia/": "teal",
 "res://Assets/Sprites/Enemigos/OBSOLETOS/": "teal",
 "res://Assets/Sprites/Interactuables/": "blue",
