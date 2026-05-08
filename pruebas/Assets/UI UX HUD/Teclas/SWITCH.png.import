@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfrqrqyac608v"
-path="res://.godot/imported/ph tecl.png-b688150cf786cf7c841a00d693fea128.ctex"
+uid="uid://x77ts67xh310"
+path="res://.godot/imported/SWITCH.png-036a95323f2a66d2009f7e44dbd51ed9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI UX HUD/ph tecl.png"
-dest_files=["res://.godot/imported/ph tecl.png-b688150cf786cf7c841a00d693fea128.ctex"]
+source_file="res://Assets/UI UX HUD/Teclas/SWITCH.png"
+dest_files=["res://.godot/imported/SWITCH.png-036a95323f2a66d2009f7e44dbd51ed9.ctex"]
 
 [params]
 

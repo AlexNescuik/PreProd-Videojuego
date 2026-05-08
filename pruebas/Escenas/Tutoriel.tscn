@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://3xxnorcr13yc" path="res://Escenas/Monos/EnemigoLargo.tscn" id="11_qhm8p"]
 [ext_resource type="Script" uid="uid://pftmcdefv6qt" path="res://Scripts/UI UX HUD/CartelAtaque.gd" id="12_27xn8"]
 [ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="12_rhpyv"]
+[ext_resource type="PackedScene" uid="uid://bm03wuao5wcan" path="res://Escenas/UI UX HUD/MenuPausa.tscn" id="14_p4j5b"]
+[ext_resource type="Script" uid="uid://cjuhnf76xekmk" path="res://Scripts/meta.gd" id="15_2ek3o"]
 
 [sub_resource type="GDScript" id="GDScript_xklos"]
 
@@ -2108,10 +2110,13 @@ sources/4 = SubResource("TileSetAtlasSource_rxl0x")
 sources/5 = SubResource("TileSetAtlasSource_rweao")
 sources/6 = SubResource("TileSetAtlasSource_8x34o")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4j5b"]
+size = Vector2(49, 94)
+
 [node name="DEMO" type="Node2D" unique_id=297642043]
 
 [node name="Player" parent="." unique_id=1066533691 instance=ExtResource("1_4v8kk")]
-position = Vector2(-145, -19)
+position = Vector2(-139, -20)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528 groups=["jugador"]]
 position = Vector2(23, -92)
@@ -2224,3 +2229,17 @@ theme_override_font_sizes/normal_font_size = 11
 bbcode_enabled = true
 script = ExtResource("12_27xn8")
 mensaje_base = "¡Trata de saltar por la pared!"
+
+[node name="MenuPausa" parent="." unique_id=1789898304 instance=ExtResource("14_p4j5b")]
+
+[node name="Meta" type="Area2D" parent="." unique_id=1014114861]
+position = Vector2(842, -763)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_2ek3o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Meta" unique_id=2141856808]
+position = Vector2(-1, -47)
+shape = SubResource("RectangleShape2D_p4j5b")
+
+[connection signal="body_entered" from="Meta" to="Meta" method="_on_meta_body_entered"]
