@@ -6,6 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="4_lbbbq"]
 [ext_resource type="StyleBox" uid="uid://cav2srirqt5ht" path="res://hoover_style.tres" id="5_an7al"]
 [ext_resource type="StyleBox" uid="uid://rmjjbav6lvop" path="res://focus_style.tres" id="6_w0eqe"]
+[ext_resource type="AudioStream" uid="uid://b4f5kvuft5p23" path="res://Sonido/UI UX HUD/sfx_yay.mp3" id="7_lbbbq"]
 
 [node name="Congratulations" type="Control" unique_id=854813733]
 layout_mode = 3
@@ -107,6 +108,10 @@ theme_override_styles/pressed = ExtResource("4_lbbbq")
 theme_override_styles/hover = ExtResource("5_an7al")
 theme_override_styles/focus = ExtResource("6_w0eqe")
 text = "Salir"
+
+[node name="SndVictoria" type="AudioStreamPlayer2D" parent="." unique_id=519492745]
+stream = ExtResource("7_lbbbq")
+volume_db = -5.0
 
 [connection signal="pressed" from="VBoxContainer/VolverAJugar" to="." method="_on_volver_a_jugar_pressed"]
 [connection signal="pressed" from="VBoxContainer/Menu" to="." method="_on_menu_pressed"]

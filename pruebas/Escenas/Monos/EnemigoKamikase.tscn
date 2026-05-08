@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://dssij18qoadt2" path="res://Scripts/Monos/enemigo_kamikase.gd" id="1_sjios"]
 [ext_resource type="Texture2D" uid="uid://bmfb6ebs2vwbn" path="res://Assets/Sprites/Enemigos/Kamikase/enemigo medio explosion.png" id="2_sjios"]
 [ext_resource type="Texture2D" uid="uid://nkv2udjoibb1" path="res://Assets/Sprites/Enemigos/Kamikase/Enemigo medio idle.png" id="2_sqal8"]
-[ext_resource type="AudioStream" uid="uid://26hrun0fbvu" path="res://Sonido/Kamikaze/sfx_explosion.ogg" id="4_pfnd5"]
-[ext_resource type="AudioStream" uid="uid://ctmhi57vmnf4w" path="res://Sonido/Kamikaze/sfx_tic.ogg" id="5_lfhd4"]
+[ext_resource type="AudioStream" uid="uid://26hrun0fbvu" path="res://Sonido/Monos/Kamikaze/sfx_explosion.ogg" id="4_pfnd5"]
+[ext_resource type="AudioStream" uid="uid://ctmhi57vmnf4w" path="res://Sonido/Monos/Kamikaze/sfx_tic.ogg" id="5_lfhd4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60s6t"]
 atlas = ExtResource("2_sjios")

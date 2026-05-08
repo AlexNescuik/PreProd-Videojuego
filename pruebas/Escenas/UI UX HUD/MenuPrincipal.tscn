@@ -9,6 +9,8 @@
 [ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="5_0nth5"]
 [ext_resource type="Texture2D" uid="uid://cbv5li8pf2bf0" path="res://Assets/UI UX HUD/Menu UI/Sonido.png" id="5_qqcp7"]
 [ext_resource type="StyleBox" uid="uid://rmjjbav6lvop" path="res://focus_style.tres" id="6_0nth5"]
+[ext_resource type="AudioStream" uid="uid://bk3an2yegffpo" path="res://Sonido/UI UX HUD/sfx_hover.mp3" id="10_e3q22"]
+[ext_resource type="AudioStream" uid="uid://bi6qtx0y3puvi" path="res://Sonido/UI UX HUD/Click - Sound Effect (HD).mp3" id="10_pfhyy"]
 
 [node name="MenuPrincipal" type="Control" unique_id=1309723877]
 layout_mode = 3
@@ -101,6 +103,12 @@ theme_override_styles/normal = ExtResource("4_p0dpe")
 theme_override_styles/hover = ExtResource("4_p0dpe")
 theme_override_styles/focus = ExtResource("6_0nth5")
 text = " SALIR"
+
+[node name="SndHover" type="AudioStreamPlayer2D" parent="." unique_id=2053142929]
+stream = ExtResource("10_e3q22")
+
+[node name="SndClick" type="AudioStreamPlayer2D" parent="." unique_id=1005808310]
+stream = ExtResource("10_pfhyy")
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]

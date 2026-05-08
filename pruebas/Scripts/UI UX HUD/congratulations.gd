@@ -1,6 +1,7 @@
 extends Control
 
 func _ready():
+	$SndVictoria.play()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	$VBoxContainer/VolverAJugar.grab_focus()
 
