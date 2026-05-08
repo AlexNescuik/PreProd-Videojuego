@@ -16,6 +16,13 @@ func _ready():
 	anim.play("IDLE")
 	if not anim.animation_finished.is_connected(_on_anim_terminada):
 		anim.animation_finished.connect(_on_anim_terminada)
+		
+		add_to_group("enemigo")
+		$AnimatedSprite2D.play("Idle") 
+	
+	# Conectamos la señal para saber cuándo termina de explotar
+	if not anim.animation_finished.is_connected(_on_anim_terminada):
+		anim.animation_finished.connect(_on_anim_terminada)
 
 func _physics_process(delta):
 	if estado_actual == Estado.MUERTO: return
@@ -25,7 +32,7 @@ func _physics_process(delta):
 		Estado.IDLE, Estado.ACTIVADO:
 			if jugador_objetivo:
 				mirar_al_jugador()
-			velocity.x = 0 
+			velocity.x = 0
 
 	move_and_slide()
 
@@ -73,7 +80,7 @@ func aplicar_daño(body):
 	if body.has_method("morir"):
 		body.morir()
 
-# --- MORIR ---
+# --- MOROR ---
 
 func morir():
 	if estado_actual == Estado.MUERTO or estado_actual == Estado.EXPLOTANDO: return
