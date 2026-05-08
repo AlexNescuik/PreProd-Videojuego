@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c70ft2iueerxh"
-path="res://.godot/imported/Controles.png-84bef92f732bcc84359a691ee406eebf.ctex"
+uid="uid://dfit0v5p6psjy"
+path="res://.godot/imported/Control abajo.png-6384977de6a1bd3b4a7ae40b51d3ebb5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI UX HUD/Controles.png"
-dest_files=["res://.godot/imported/Controles.png-84bef92f732bcc84359a691ee406eebf.ctex"]
+source_file="res://Assets/UI UX HUD/Teclas/Control/Control abajo.png"
+dest_files=["res://.godot/imported/Control abajo.png-6384977de6a1bd3b4a7ae40b51d3ebb5.ctex"]
 
 [params]
 

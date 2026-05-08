@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://0d1duesykpxa" path="res://Escenas/Monos/EnemigoCorto.tscn" id="9_xv76v"]
 [ext_resource type="PackedScene" uid="uid://desiamc7owfj0" path="res://Escenas/Monos/EnemigoKamikase.tscn" id="10_8v14g"]
 [ext_resource type="PackedScene" uid="uid://3xxnorcr13yc" path="res://Escenas/Monos/EnemigoLargo.tscn" id="11_qhm8p"]
+[ext_resource type="Script" uid="uid://pftmcdefv6qt" path="res://Scripts/UI UX HUD/CartelAtaque.gd" id="12_27xn8"]
+[ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="12_rhpyv"]
 
 [sub_resource type="GDScript" id="GDScript_xklos"]
 
@@ -2109,7 +2111,7 @@ sources/6 = SubResource("TileSetAtlasSource_8x34o")
 [node name="DEMO" type="Node2D" unique_id=297642043]
 
 [node name="Player" parent="." unique_id=1066533691 instance=ExtResource("1_4v8kk")]
-position = Vector2(360, -375)
+position = Vector2(-145, -19)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=851578528 groups=["jugador"]]
 position = Vector2(23, -92)
@@ -2150,3 +2152,75 @@ position = Vector2(1166, -384)
 
 [node name="EnemigoLargo2" parent="." unique_id=1131561900 instance=ExtResource("11_qhm8p")]
 position = Vector2(619, -496)
+
+[node name="CartelBajar" type="RichTextLabel" parent="." unique_id=730447628]
+texture_filter = 1
+offset_left = 504.0
+offset_top = -407.0
+offset_right = 625.0
+offset_bottom = -374.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "Puedes bajar presionando abajo"
+
+[node name="CartelSaltador" type="RichTextLabel" parent="." unique_id=24903135]
+texture_filter = 1
+offset_left = 484.0
+offset_top = -242.0
+offset_right = 631.0
+offset_bottom = -209.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "¡Intenta golpearlo con lo que sea!"
+
+[node name="CartelYaSabes" type="RichTextLabel" parent="." unique_id=506552432]
+texture_filter = 1
+offset_left = 994.0
+offset_top = -323.0
+offset_right = 1076.0
+offset_bottom = -236.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "Ya sabes todo lo que tienes que saber..."
+
+[node name="CartelAtaque" type="RichTextLabel" parent="." unique_id=1613189927]
+texture_filter = 1
+offset_left = 20.0
+offset_top = -155.0
+offset_right = 203.0
+offset_bottom = -104.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "¡Mira! Ahí hay un enemigo. Presiona [ACCION] para atacar"
+
+[node name="CartelBarrido" type="RichTextLabel" parent="." unique_id=1949386327]
+texture_filter = 1
+offset_left = 211.0
+offset_top = -362.0
+offset_right = 323.0
+offset_bottom = -328.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "¿Y si intentas presionar [ABAJO]?"
+
+[node name="CartelSaltoPared" type="RichTextLabel" parent="." unique_id=825150629]
+texture_filter = 1
+offset_left = 292.0
+offset_top = -170.0
+offset_right = 413.0
+offset_bottom = -111.0
+theme_override_fonts/normal_font = ExtResource("12_rhpyv")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+script = ExtResource("12_27xn8")
+mensaje_base = "¡Trata de saltar por la pared!"

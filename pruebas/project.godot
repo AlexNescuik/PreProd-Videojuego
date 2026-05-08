@@ -18,6 +18,7 @@ config/icon="uid://dt7v2q7cvy6xa"
 [autoload]
 
 Transicion="*uid://biyy45c534aqi"
+InputHelper="*uid://b7w57hi6novqw"
 
 [dotnet]
 
@@ -42,6 +43,10 @@ folder_colors={
 "res://Assets/TileMaps/": "purple",
 "res://Assets/TileMaps/TileMap comprado/": "blue",
 "res://Assets/UI UX HUD/": "purple",
+"res://Assets/UI UX HUD/Menu UI/": "pink",
+"res://Assets/UI UX HUD/Teclas/": "pink",
+"res://Assets/UI UX HUD/Teclas/Control/": "blue",
+"res://Assets/UI UX HUD/Teclas/Teclado/": "blue",
 "res://Escenas/": "pink",
 "res://Escenas/Monos/": "purple",
 "res://Escenas/NIVELES DESCARTADOS/": "purple",
@@ -92,8 +97,7 @@ Caminado={
 Ataque={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":99,"location":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":76,"key_label":0,"unicode":108,"location":0,"echo":false,"script":null)
-, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":1,"pressure":0.0,"pressed":false,"script":null)
+, Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":5,"axis_value":1.0,"script":null)
 ]
 }
 

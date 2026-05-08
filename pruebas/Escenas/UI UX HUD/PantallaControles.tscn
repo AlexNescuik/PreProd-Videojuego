@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b7i0uce7c7qy3"]
+
+[ext_resource type="Script" uid="uid://727juftka86t" path="res://Scripts/UI UX HUD/pantalla_controles.gd" id="1_17cmc"]
+[ext_resource type="Texture2D" uid="uid://dfrqrqyac608v" path="res://Assets/UI UX HUD/ph tecl.png" id="2_l6dqx"]
+[ext_resource type="Texture2D" uid="uid://c2nh3lh3jshmw" path="res://Assets/UI UX HUD/ph cont.png" id="3_qixs3"]
+
+[node name="PantallaControles" type="Control" unique_id=612328506]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_17cmc")
+imagen_teclado = ExtResource("2_l6dqx")
+imagen_control = ExtResource("3_qixs3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=604841471]
+layout_mode = 1
+scale = Vector2(0.6, 0.6)
+stretch_mode = 6

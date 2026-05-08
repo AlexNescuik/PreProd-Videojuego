@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bvlgcbohr28tm"
+uid="uid://b7046g5bf3c37"
 path="res://.godot/imported/DTM-Mono.otf-f8a437246693972a852f7870b2966ec4.fontdata"
 
 [deps]
@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/DTM-Mono.otf-f8a437246693972a852f7870b2966ec4
 [params]
 
 Rendering=null
-antialiasing=1
+antialiasing=0
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false

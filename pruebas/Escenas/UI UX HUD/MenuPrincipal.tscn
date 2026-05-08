@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bl4mw6h5q7u8s" path="res://Scripts/UI UX HUD/menu_principal.gd" id="1_4kk64"]
 [ext_resource type="Texture2D" uid="uid://buox38yo2hgh4" path="res://UI/Pantallas/PcPNombre.jpg" id="1_brhro"]
-[ext_resource type="FontFile" uid="uid://bvlgcbohr28tm" path="res://Assets/Fonts/DTM-Mono.otf" id="2_xwjwc"]
-[ext_resource type="Texture2D" uid="uid://db5hvwdk5m4k" path="res://Assets/UI UX HUD/Play.png" id="3_fh5gt"]
+[ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="2_xwjwc"]
+[ext_resource type="Texture2D" uid="uid://db5hvwdk5m4k" path="res://Assets/UI UX HUD/Menu UI/Play.png" id="3_fh5gt"]
 [ext_resource type="StyleBox" uid="uid://ddmbepdq5q3px" path="res://new_style_box_flat.tres" id="4_5ppfe"]
-[ext_resource type="Texture2D" uid="uid://c70ft2iueerxh" path="res://Assets/UI UX HUD/Controles.png" id="4_y0q32"]
-[ext_resource type="Texture2D" uid="uid://cbv5li8pf2bf0" path="res://Assets/UI UX HUD/Sonido.png" id="5_qqcp7"]
+[ext_resource type="Texture2D" uid="uid://c70ft2iueerxh" path="res://Assets/UI UX HUD/Menu UI/Controles.png" id="4_y0q32"]
+[ext_resource type="Texture2D" uid="uid://cbv5li8pf2bf0" path="res://Assets/UI UX HUD/Menu UI/Sonido.png" id="5_qqcp7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ppfe"]
 bg_color = Color(0.42374906, 0.6315431, 0.74586004, 1)
@@ -86,6 +86,7 @@ icon_alignment = 2
 expand_icon = true
 
 [node name="Sonido" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1069812493]
+visible = false
 layout_mode = 2
 theme_override_constants/icon_max_width = 40
 theme_override_fonts/font = ExtResource("2_xwjwc")

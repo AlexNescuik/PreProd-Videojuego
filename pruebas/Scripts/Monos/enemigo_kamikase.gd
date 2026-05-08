@@ -13,7 +13,7 @@ var jugador_objetivo: Node2D = null
 func _ready():
 	add_to_group("enemigo")
 	estado_actual = Estado.IDLE
-	anim.play("IDLE")
+	anim.play("Idle")
 	if not anim.animation_finished.is_connected(_on_anim_terminada):
 		anim.animation_finished.connect(_on_anim_terminada)
 		

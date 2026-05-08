@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db5hvwdk5m4k"
-path="res://.godot/imported/Play.png-1606e7c90d1998ba373dedc5931a74dc.ctex"
+uid="uid://bo2upqikiux8e"
+path="res://.godot/imported/boton abajo.png-fbfaa4092882f845ab55f7db2b5401cc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/UI UX HUD/Play.png"
-dest_files=["res://.godot/imported/Play.png-1606e7c90d1998ba373dedc5931a74dc.ctex"]
+source_file="res://Assets/UI UX HUD/Teclas/Teclado/boton abajo.png"
+dest_files=["res://.godot/imported/boton abajo.png-fbfaa4092882f845ab55f7db2b5401cc.ctex"]
 
 [params]
 
