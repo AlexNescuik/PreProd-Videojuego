@@ -117,7 +117,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Ataque",
-"speed": 7.0
+"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -187,7 +187,7 @@ animations = [{
 size = Vector2(12, 2)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6tlc7"]
-radius = 55.00909
+radius = 43.011627
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_awfuy"]
 size = Vector2(24, 33)
@@ -204,7 +204,8 @@ position = Vector2(2, -2)
 scale = Vector2(1.125, 1.125)
 sprite_frames = SubResource("SpriteFrames_vn1tc")
 animation = &"Ataque"
-frame = 2
+frame = 5
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1111974272 groups=["hurtbox_enemigo"]]
 position = Vector2(2, 15)

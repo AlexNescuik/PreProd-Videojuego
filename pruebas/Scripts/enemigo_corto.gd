@@ -30,10 +30,13 @@ func _physics_process(delta):
 			
 		Estado.PERSEGUIR: 
 			anim.play("Caminata")
-			if jugador_objetivo and abs(jugador_objetivo.global_position.x - global_position.x) > 15.0:
-				velocity.x = direccion * vel_persecucion
-			else:
+			if not rayo_suelo.is_colliding():
 				velocity.x = 0
+			else:
+				if jugador_objetivo and abs(jugador_objetivo.global_position.x - global_position.x) > 15.0:
+					velocity.x = direccion * vel_persecucion
+				else:
+					velocity.x = 0
 				
 		Estado.ATACAR: 
 			velocity.x = 0

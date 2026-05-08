@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://ca7fqx7u2kude" path="res://Assets/Sprites/Player/Torbellino Jr/Slide_Full_Color_.png" id="3_y717v"]
 [ext_resource type="Texture2D" uid="uid://bva16nx2q3jc3" path="res://Assets/Sprites/Player/Torbellino Jr/Panzaso_corr.png" id="4_ohiiw"]
 [ext_resource type="Texture2D" uid="uid://kh1jm13imrwu" path="res://Assets/Sprites/Player/Torbellino Jr/Run_Full_Color-Sheet.png" id="6_y717v"]
+[ext_resource type="Texture2D" uid="uid://b3g7n0pq6l37b" path="res://Assets/Sprites/Player/Torbellino Jr/Muerte_Full_Color_Sheet.png" id="8_ujgu7"]
 [ext_resource type="Texture2D" uid="uid://lbhh6d0l8485" path="res://Assets/Sprites/Player/Torbellino Jr/Idle_Full_Color.png" id="8_y717v"]
-[ext_resource type="Texture2D" uid="uid://b86j6bqghsh6f" path="res://Assets/Sprites/Player/Torbellino Jr/Aturdido_Full_Color.png" id="9_ul4kv"]
 [ext_resource type="Texture2D" uid="uid://bop2qn416plr4" path="res://Assets/Sprites/Player/Torbellino Jr/Wall_land_Full_Color.png" id="10_oba5i"]
 [ext_resource type="Texture2D" uid="uid://bmkehu54vt3uw" path="res://Assets/Sprites/Player/Torbellino Jr/Jump_Full_Color_Sheet.png" id="11_oba5i"]
 
@@ -170,17 +170,41 @@ region = Rect2(384, 0, 48, 48)
 atlas = ExtResource("8_y717v")
 region = Rect2(432, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_oba5i"]
-atlas = ExtResource("9_ul4kv")
+[sub_resource type="AtlasTexture" id="AtlasTexture_0wcqx"]
+atlas = ExtResource("8_ujgu7")
 region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y717v"]
-atlas = ExtResource("9_ul4kv")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqp5x"]
+atlas = ExtResource("8_ujgu7")
 region = Rect2(48, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vwnoe"]
-atlas = ExtResource("9_ul4kv")
+[sub_resource type="AtlasTexture" id="AtlasTexture_84kvk"]
+atlas = ExtResource("8_ujgu7")
 region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j082r"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nfrd3"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xb253"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cy4dt"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_maep5"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(336, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41d4c"]
+atlas = ExtResource("8_ujgu7")
+region = Rect2(384, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ch4f"]
 atlas = ExtResource("10_oba5i")
@@ -376,17 +400,35 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_oba5i")
+"texture": SubResource("AtlasTexture_0wcqx")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_y717v")
+"texture": SubResource("AtlasTexture_kqp5x")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vwnoe")
+"texture": SubResource("AtlasTexture_84kvk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j082r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nfrd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xb253")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cy4dt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_maep5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_41d4c")
 }],
 "loop": false,
 "name": &"Muerte",
-"speed": 9.0
+"speed": 16.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -454,7 +496,9 @@ script = ExtResource("1_qgqwx")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
 position = Vector2(22.999994, -60.250008)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"IDLE"
+animation = &"Muerte"
+frame = 8
+frame_progress = 1.0
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(23, -59)
