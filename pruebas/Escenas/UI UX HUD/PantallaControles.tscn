@@ -4,6 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://lwb2xh8jqvnk" path="res://Assets/UI UX HUD/Teclas/TECLADO.png" id="2_l6dqx"]
 [ext_resource type="Texture2D" uid="uid://cao5fvadwn3jy" path="res://Assets/UI UX HUD/Teclas/XBOX.png" id="3_qixs3"]
 [ext_resource type="Texture2D" uid="uid://x77ts67xh310" path="res://Assets/UI UX HUD/Teclas/SWITCH.png" id="4_rdg14"]
+[ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="5_rdg14"]
+[ext_resource type="StyleBox" uid="uid://c2kuqgywid40t" path="res://normal_style.tres" id="6_37lsx"]
+[ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="7_wcuey"]
+[ext_resource type="StyleBox" uid="uid://cav2srirqt5ht" path="res://hoover_style.tres" id="8_60ln8"]
+[ext_resource type="StyleBox" uid="uid://rmjjbav6lvop" path="res://focus_style.tres" id="9_15opa"]
 
 [node name="PantallaControles" type="Control" unique_id=612328506]
 layout_mode = 3
@@ -17,3 +22,20 @@ imagen_switch = ExtResource("4_rdg14")
 layout_mode = 1
 scale = Vector2(0.6, 0.6)
 stretch_mode = 6
+
+[node name="Regresar" type="Button" parent="." unique_id=1342573511]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 834.0
+offset_top = 550.0
+offset_right = 1127.0
+offset_bottom = 622.0
+theme_override_fonts/font = ExtResource("5_rdg14")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/normal = ExtResource("6_37lsx")
+theme_override_styles/pressed = ExtResource("7_wcuey")
+theme_override_styles/hover = ExtResource("8_60ln8")
+theme_override_styles/focus = ExtResource("9_15opa")
+text = "Regresar"
+
+[connection signal="pressed" from="Regresar" to="." method="_on_regresar_pressed"]

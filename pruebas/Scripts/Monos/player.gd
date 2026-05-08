@@ -222,7 +222,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 		Estado.SALTANDO:
 			ejecutar_salto()
 		Estado.ATACANDO:  
-			$SndAtaque.play()
+			play_random_pitch($SndAtaque)
 			iniciar_accion("Ataque")
 
 func verificar_inputs_especiales() -> void:
@@ -253,7 +253,7 @@ func verificar_inputs_especiales() -> void:
 		cambiar_estado(Estado.ATACANDO)
 
 func ejecutar_salto() -> void:
-	$SndSalto.play()
+	play_random_pitch($SndSalto)
 	if timer_wall_jump > 0:
 		velocity.y = FUERZA_SALTO 
 		return
@@ -418,14 +418,17 @@ func morir():
 	cambiar_estado(Estado.MUERTO, true)
 	vida_actual -= 1
 	cambio_vida.emit(vida_actual)
-	
+		
 	velocity = Vector2.ZERO
-	if animaciones.sprite_frames.has_animation("Muerte"): animaciones.play("Muerte")
-	else: animaciones.stop()
+	if animaciones.sprite_frames.has_animation("Muerte"): 
+		animaciones.play("Muerte")
 	
 	await get_tree().create_timer(1.0).timeout
-	if vida_actual > 0: respawn()
-	else: game_over_total()
+	
+	if vida_actual > 0:
+		get_tree().reload_current_scene()
+	else:
+		game_over_total()
 
 func respawn():
 	velocity = Vector2.ZERO

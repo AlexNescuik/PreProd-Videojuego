@@ -212,10 +212,10 @@ size = Vector2(12, 2)
 radius = 89.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_awfuy"]
-size = Vector2(37, 38)
+size = Vector2(18, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_672mf"]
-size = Vector2(44.5, 46)
+size = Vector2(34.25, 33)
 
 [node name="EnemigoLargo" type="CharacterBody2D" unique_id=628822398 groups=["enemigo"]]
 collision_layer = 4
@@ -253,7 +253,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pivote/ZonaAtaque" unique_id=1899902335]
-position = Vector2(1.5, 2)
+position = Vector2(1, 5)
 shape = SubResource("RectangleShape2D_awfuy")
 debug_color = Color(0.97573155, 0.13463551, 0.20832899, 0.41960785)
 
@@ -262,7 +262,7 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxEnemigo" unique_id=1234840579]
-position = Vector2(1, 1)
+position = Vector2(1, 4)
 shape = SubResource("RectangleShape2D_672mf")
 
 [node name="SndSaltoEnemigo" type="AudioStreamPlayer2D" parent="." unique_id=538876333]

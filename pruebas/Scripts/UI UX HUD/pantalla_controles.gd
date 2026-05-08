@@ -5,10 +5,12 @@ extends Control
 @export var imagen_switch : Texture2D
 
 @onready var visualizador = $TextureRect 
+@onready var boton_regresar = $Regresar
 
 func _ready():
+	boton_regresar.grab_focus()
+	
 	InputHelper.cambio_de_dispositivo.connect(_on_cambio_input)
-	# Forzamos la primera revisión
 	_on_cambio_input(InputHelper.usando_control)
 
 func _on_cambio_input(es_control):
@@ -22,3 +24,6 @@ func _on_cambio_input(es_control):
 			visualizador.texture = imagen_switch
 		else:
 			visualizador.texture = imagen_xbox
+
+func _on_regresar_pressed():
+	Transicion.cambiar_escena("res://Escenas/UI UX HUD/MenuPrincipal.tscn")
