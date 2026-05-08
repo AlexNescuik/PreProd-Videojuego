@@ -1,6 +1,21 @@
 [gd_scene format=3 uid="uid://cpjww1fr1a8m6"]
 
+[ext_resource type="Script" uid="uid://bl4mw6h5q7u8s" path="res://Scripts/UI UX HUD/menu_principal.gd" id="1_4kk64"]
 [ext_resource type="Texture2D" uid="uid://buox38yo2hgh4" path="res://UI/Pantallas/PcPNombre.jpg" id="1_brhro"]
+[ext_resource type="FontFile" uid="uid://bvlgcbohr28tm" path="res://Assets/Fonts/DTM-Mono.otf" id="2_xwjwc"]
+[ext_resource type="Texture2D" uid="uid://db5hvwdk5m4k" path="res://Assets/UI UX HUD/Play.png" id="3_fh5gt"]
+[ext_resource type="StyleBox" uid="uid://ddmbepdq5q3px" path="res://new_style_box_flat.tres" id="4_5ppfe"]
+[ext_resource type="Texture2D" uid="uid://c70ft2iueerxh" path="res://Assets/UI UX HUD/Controles.png" id="4_y0q32"]
+[ext_resource type="Texture2D" uid="uid://cbv5li8pf2bf0" path="res://Assets/UI UX HUD/Sonido.png" id="5_qqcp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ppfe"]
+bg_color = Color(0.42374906, 0.6315431, 0.74586004, 1)
+border_width_left = 5
+border_width_right = 5
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="MenuPrincipal" type="Control" unique_id=1309723877]
 layout_mode = 3
@@ -11,6 +26,7 @@ offset_bottom = -0.19500732
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_stretch_ratio = 0.0
+script = ExtResource("1_4kk64")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1610492732]
 layout_mode = 1
@@ -20,6 +36,7 @@ anchor_bottom = 1.0
 offset_top = -155.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("1_brhro")
 expand_mode = 1
 stretch_mode = 6
@@ -32,21 +49,65 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -22.0
-offset_right = 20.0
-offset_bottom = 22.0
+offset_left = -166.0
+offset_top = -134.5
+offset_right = 166.0
+offset_bottom = 134.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 15
 
-[node name="Iniciar" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=649584883]
+[node name="Jugar" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=649584883]
+unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_5ppfe")
+theme_override_styles/hover = ExtResource("4_5ppfe")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5ppfe")
+text = " JUGAR"
+icon = ExtResource("3_fh5gt")
+icon_alignment = 2
+expand_icon = true
 
 [node name="Controles" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=722985688]
 layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_5ppfe")
+theme_override_styles/hover = ExtResource("4_5ppfe")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5ppfe")
+text = "CONTROLES"
+icon = ExtResource("4_y0q32")
+icon_alignment = 2
+expand_icon = true
 
 [node name="Sonido" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1069812493]
 layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_5ppfe")
+theme_override_styles/hover = ExtResource("4_5ppfe")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5ppfe")
+text = " SONIDO"
+icon = ExtResource("5_qqcp7")
+icon_alignment = 2
+expand_icon = true
 
 [node name="Salir" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=416577934]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_5ppfe")
+theme_override_styles/hover = ExtResource("4_5ppfe")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5ppfe")
+text = " SALIR"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Sonido" to="." method="_on_sonido_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Salir" to="." method="_on_salir_pressed"]

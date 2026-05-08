@@ -55,6 +55,7 @@ _data = {
 }
 
 [node name="Transicion" type="CanvasLayer" unique_id=319262945]
+layer = 100
 script = ExtResource("1_hh8ej")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2015414302]
@@ -64,6 +65,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect" unique_id=1511371079]
