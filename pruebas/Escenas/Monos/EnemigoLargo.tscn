@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b2j7yvnoob1pi" path="res://Assets/Sprites/Enemigos/Larga Distancia/Largo alcance salto-export.png" id="3_rx6r6"]
 [ext_resource type="Texture2D" uid="uid://b6sxaenlrk5pr" path="res://Assets/Sprites/Enemigos/Larga Distancia/Largo Alcance Idle.png" id="4_rx6r6"]
 [ext_resource type="Texture2D" uid="uid://dg4vvkvpv3i2v" path="res://Assets/Sprites/Enemigos/Larga Distancia/Largo alcance muerte.png" id="5_rx6r6"]
+[ext_resource type="AudioStream" uid="uid://btxyykvr5ufbt" path="res://Sonido/RanaRene/sfx_saltoRana.ogg" id="6_3cu4l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rx6r6"]
 atlas = ExtResource("2_cq4li")
@@ -263,6 +264,9 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxEnemigo" unique_id=1234840579]
 position = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_672mf")
+
+[node name="SndSaltoEnemigo" type="AudioStreamPlayer2D" parent="." unique_id=538876333]
+stream = ExtResource("6_3cu4l")
 
 [connection signal="body_entered" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_entered"]
 [connection signal="body_exited" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_exited"]

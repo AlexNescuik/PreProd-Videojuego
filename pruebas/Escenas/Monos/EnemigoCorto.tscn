@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://betp2hm2onmoa" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance 1 idle.png" id="1_ncv37"]
 [ext_resource type="Texture2D" uid="uid://bshaep3mk05i4" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance caminata.png" id="1_wbt2v"]
 [ext_resource type="Texture2D" uid="uid://djnn4cbajx4fb" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance muerte.png" id="4_ige3y"]
+[ext_resource type="AudioStream" uid="uid://dqh5120iav7h2" path="res://Sonido/Corto/sfx_golpeEnem.ogg" id="6_672mf"]
+[ext_resource type="AudioStream" uid="uid://dkgjpn0ejck8y" path="res://Sonido/Corto/sfx_pisadaEnem.ogg" id="7_vn4d2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ncv37"]
 atlas = ExtResource("1_5jc85")
@@ -244,6 +246,12 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxEnemigo" unique_id=1234840579]
 position = Vector2(2, -1)
 shape = SubResource("RectangleShape2D_672mf")
+
+[node name="SndGolpeEnemigo" type="AudioStreamPlayer2D" parent="." unique_id=720567195]
+stream = ExtResource("6_672mf")
+
+[node name="SndPasosEnemigo" type="AudioStreamPlayer2D" parent="." unique_id=685994529]
+stream = ExtResource("7_vn4d2")
 
 [connection signal="body_entered" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_entered"]
 [connection signal="body_exited" from="Pivote/ZonaVision" to="." method="_on_zona_vision_body_exited"]

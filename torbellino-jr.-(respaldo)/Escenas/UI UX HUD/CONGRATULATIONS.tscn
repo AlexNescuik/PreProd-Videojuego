@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://du8bnh0nqrk43"]
+
+[ext_resource type="Script" uid="uid://b77votp73asy7" path="res://Scripts/UI UX HUD/congratulations.gd" id="1_n3qhs"]
+[ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="2_h8fsd"]
+[ext_resource type="StyleBox" uid="uid://c2kuqgywid40t" path="res://normal_style.tres" id="3_n3c60"]
+[ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="4_lbbbq"]
+[ext_resource type="StyleBox" uid="uid://cav2srirqt5ht" path="res://hoover_style.tres" id="5_an7al"]
+[ext_resource type="StyleBox" uid="uid://rmjjbav6lvop" path="res://focus_style.tres" id="6_w0eqe"]
+
+[node name="Congratulations" type="Control" unique_id=854813733]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n3qhs")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=906905756]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.123258285, 0.12779358, 0.19630301, 1)
+
+[node name="Label" type="Label" parent="ColorRect" unique_id=408191796]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -312.0
+offset_top = -200.0
+offset_right = 312.0
+offset_bottom = -104.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_h8fsd")
+theme_override_font_sizes/font_size = 80
+text = "¡FELICIDADES!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="ColorRect" unique_id=1071794966]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -312.0
+offset_top = -112.0
+offset_right = 312.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.59943515, 0.61902064, 0.7572145, 1)
+theme_override_fonts/font = ExtResource("2_h8fsd")
+theme_override_font_sizes/font_size = 40
+text = "¡Pasaste el juego!"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1115625047]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.61
+anchor_right = 0.5
+anchor_bottom = 0.61
+offset_left = -214.0
+offset_top = -101.78
+offset_right = 214.0
+offset_bottom = 101.22
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="VolverAJugar" type="Button" parent="VBoxContainer" unique_id=1413658495]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h8fsd")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("3_n3c60")
+theme_override_styles/pressed = ExtResource("4_lbbbq")
+theme_override_styles/hover = ExtResource("5_an7al")
+theme_override_styles/focus = ExtResource("6_w0eqe")
+text = "Volver a Jugar"
+
+[node name="Menu" type="Button" parent="VBoxContainer" unique_id=1432188790]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h8fsd")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("3_n3c60")
+theme_override_styles/pressed = ExtResource("4_lbbbq")
+theme_override_styles/hover = ExtResource("5_an7al")
+theme_override_styles/focus = ExtResource("6_w0eqe")
+text = "Ir al Menú"
+
+[node name="Salir" type="Button" parent="VBoxContainer" unique_id=399295874]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h8fsd")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("3_n3c60")
+theme_override_styles/pressed = ExtResource("4_lbbbq")
+theme_override_styles/hover = ExtResource("5_an7al")
+theme_override_styles/focus = ExtResource("6_w0eqe")
+text = "Salir"
+
+[connection signal="pressed" from="VBoxContainer/VolverAJugar" to="." method="_on_volver_a_jugar_pressed"]
+[connection signal="pressed" from="VBoxContainer/Menu" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="VBoxContainer/Salir" to="." method="_on_salir_pressed"]

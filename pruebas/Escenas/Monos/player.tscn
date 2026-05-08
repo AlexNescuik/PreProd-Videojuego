@@ -7,8 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://kh1jm13imrwu" path="res://Assets/Sprites/Player/Torbellino Jr/Run_Full_Color-Sheet.png" id="6_y717v"]
 [ext_resource type="Texture2D" uid="uid://b3g7n0pq6l37b" path="res://Assets/Sprites/Player/Torbellino Jr/Muerte_Full_Color_Sheet.png" id="8_ujgu7"]
 [ext_resource type="Texture2D" uid="uid://lbhh6d0l8485" path="res://Assets/Sprites/Player/Torbellino Jr/Idle_Full_Color.png" id="8_y717v"]
+[ext_resource type="AudioStream" uid="uid://b6us2qm7tuy1g" path="res://Sonido/Torbe/sfx_salto.ogg" id="10_0wcqx"]
 [ext_resource type="Texture2D" uid="uid://bop2qn416plr4" path="res://Assets/Sprites/Player/Torbellino Jr/Wall_land_Full_Color.png" id="10_oba5i"]
+[ext_resource type="AudioStream" uid="uid://t36sohxcy7ue" path="res://Sonido/Torbe/sfx_barrido.ogg" id="11_kqp5x"]
+[ext_resource type="AudioStream" uid="uid://1ow0kd4ah7l1" path="res://Sonido/Torbe/sfx_golpeAire.ogg" id="11_nfrd3"]
 [ext_resource type="Texture2D" uid="uid://bmkehu54vt3uw" path="res://Assets/Sprites/Player/Torbellino Jr/Jump_Full_Color_Sheet.png" id="11_oba5i"]
+[ext_resource type="AudioStream" uid="uid://cjgu4fpmn7c5q" path="res://Sonido/Torbe/sfx_aterrizaje.ogg" id="13_xb253"]
+[ext_resource type="AudioStream" uid="uid://d16dqsr50b6d3" path="res://Sonido/Torbe/sfx_golpe.ogg" id="14_cy4dt"]
+[ext_resource type="AudioStream" uid="uid://bmsvi7jgthp3l" path="res://Sonido/Torbe/sfx_pisada.ogg" id="14_xb253"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5k7ue"]
 atlas = ExtResource("2_y717v")
@@ -536,6 +542,25 @@ position = Vector2(24, -51)
 shape = SubResource("RectangleShape2D_ujgu7")
 disabled = true
 debug_color = Color(0.65882355, 0.5176471, 0, 0.5372549)
+
+[node name="SndSalto" type="AudioStreamPlayer2D" parent="." unique_id=1043721537]
+stream = ExtResource("10_0wcqx")
+
+[node name="SndAtaque" type="AudioStreamPlayer2D" parent="." unique_id=1878393071]
+stream = ExtResource("11_nfrd3")
+
+[node name="SndBarrido" type="AudioStreamPlayer2D" parent="." unique_id=184749992]
+stream = ExtResource("11_kqp5x")
+
+[node name="SndBomba" type="AudioStreamPlayer2D" parent="." unique_id=1730985238]
+stream = ExtResource("13_xb253")
+
+[node name="SndCaminar" type="AudioStreamPlayer2D" parent="." unique_id=481255716]
+stream = ExtResource("14_xb253")
+pitch_scale = 1.1
+
+[node name="SndGolpeExito" type="AudioStreamPlayer2D" parent="." unique_id=230028888]
+stream = ExtResource("14_cy4dt")
 
 [connection signal="body_entered" from="HitboxAtaque" to="." method="_on_hitbox_ataque_body_entered"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]

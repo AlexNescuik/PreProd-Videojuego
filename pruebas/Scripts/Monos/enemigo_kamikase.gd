@@ -54,6 +54,8 @@ func _on_zona_vision_body_entered(body):
 
 func activar_bomba():
 	estado_actual = Estado.ACTIVADO
+	if has_node("SndEncender"):
+		$SndEncender.play()
 	anim.play("Encender")
 	
 	await get_tree().create_timer(tiempo_detonacion).timeout
@@ -65,6 +67,7 @@ func explotar():
 	if estado_actual == Estado.MUERTO or estado_actual == Estado.EXPLOTANDO: return
 	
 	estado_actual = Estado.EXPLOTANDO
+	$SndExplosion.play()
 	anim.play("Explotar")
 	
 	var cuerpos = $Pivote/ZonaAtaque.get_overlapping_bodies()

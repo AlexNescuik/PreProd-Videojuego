@@ -55,6 +55,7 @@ func _physics_process(delta):
 
 func ejecutar_brinco(impulso_x: float):
 	puede_saltar = false
+	$SndSaltoEnemigo.play()
 	velocity.x = direccion * impulso_x
 	velocity.y = fuerza_salto_rana
 	
@@ -68,7 +69,7 @@ func cambiar_a_ataque():
 	var dir_hacia = sign(ultima_posicion_jugador.x - global_position.x)
 	if dir_hacia != 0 and dir_hacia != direccion: 
 		voltear()
-	
+	$SndSaltoEnemigo.play()
 	anim.play("Ataque")
 	velocity.x = direccion * vel_persecucion
 	velocity.y = fuerza_salto_rana * 1.2 

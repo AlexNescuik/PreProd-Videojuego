@@ -53,6 +53,7 @@ func voltear():
 func _on_zona_vision_body_entered(body):
 	if estado_actual == Estado.MUERTO: return
 	if body.is_in_group("jugador") and estado_actual != Estado.ATACAR:
+		$SndGolpeEnemigo.play()
 		jugador_objetivo = body
 		estado_actual = Estado.PERSEGUIR
 		var dir_hacia_jugador = sign(jugador_objetivo.global_position.x - global_position.x)

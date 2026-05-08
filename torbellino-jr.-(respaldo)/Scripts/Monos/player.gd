@@ -1,0 +1,474 @@
+extends CharacterBody2D
+
+signal cambio_vida(nueva_vida)
+signal juego_terminado
+
+# #########################################################
+# 1. ESTADOS Y CONFIGURACIÓN
+# #########################################################
+enum Estado { IDLE, MOVIENDO, SALTANDO, CAYENDO, ATACANDO, BARRIDO, PARED, GROUND_POUND, ATURDIDO, MUERTO }
+
+#MOVILIDAD BÁSICA HORIZONTAL
+@export_group("Movimiento Horizontal")
+const VEL_MOVIMIENTO    = 300.0 
+const VEL_BARRIDO       = 400.0 
+
+#MOVILIDAD BÁSICA VERTICAL
+@export_group("Salto y Gravedad")
+const FUERZA_SALTO       = -320.0
+const FUERZA_SALTO_SUPER = -380.0
+const GRAVEDAD           = 980.0
+const MULT_CORTE_SALTO   = 0.5
+const TIEMPO_COYOTE      = 0.12
+const TIEMPO_BUFFER_SALTO = 0.1
+
+#MOVIMIENTOS ESPECIALES
+@export_group("Especiales")
+const VEL_GROUND_POUND      = 590.0 
+const VEL_DESLIZAMIENTO     = 100.0
+const REBOTE_PARED_X        = 230.0
+const TIEMPO_BLOQUEO_WALLJUMP = 0.5
+const PAUSA_ANTICIPACION     = 0.1 
+const VENTANA_SALTO_POTENTE  = 0.2 
+const TIEMPO_MAX_BARRIDO     = 0.3
+const TIEMPO_MAX_ATURDIDO    = 0.2
+
+#SISTEMA VIDA
+@export_group("Combate y Vida")
+@export var limite_caida_y : int = 200 
+@export var vida_maxima : int = 800
+@export var vida_actual : int = 800
+
+# =========================================================
+# 2. VARIABLES INTERNAS DE ESTADO
+# =========================================================
+
+@onready var animaciones = $AnimatedSprite2D
+@onready var hitbox_ataque = $HitboxAtaque/CollisionShape2D
+
+# --- Cajas de Colisión Adaptables ---
+@onready var colision_normal = $ColisionNormal
+@onready var colision_barrido = $ColisionBarrido
+@onready var hurtbox_normal = $Hurtbox/HurtboxNormal
+@onready var hurtbox_barrido = $Hurtbox/HurtboxBarrido
+
+# --- Control Principal ---
+var estado_actual      : Estado = Estado.IDLE
+var posicion_inicio    : Vector2 
+var mask_original      : int
+var esperando_reinicio : bool = false 
+var dir_accion         : float = 0.0 
+
+# --- Entradas (Inputs) ---
+var input_dir   : float = 0.0
+
+# --- Temporizadores de Físicas ---
+var timer_super_salto  : float = 0.0
+var timer_ground_pound : float = 0.0
+var timer_wall_jump    : float = 0.0 
+var coyote_timer       : float = 0.0
+var jump_buffer_timer  : float = 0.0
+
+# --- Temporizadores de Habilidades ---
+var tiempo_barrido_actual  : float = 0.0   
+var tiempo_aturdido_actual : float = 0.0
+
+# --- Lista Anti-Spam de Daño ---
+var enemigos_golpeados : Array = []
+
+# --- Banderas Condicionales (Flags) ---
+var es_salto_potenciado : bool = false
+var bloqueo_barrido     : bool = false 
+var recuperando_gp      : bool = false    
+var es_invulnerable     : bool = false
+
+# #########################################################
+# 3. BUCLE PRINCIPAL
+# #########################################################
+func _ready():
+	posicion_inicio = global_position
+	mask_original = collision_mask
+	await get_tree().process_frame
+	cambio_vida.emit(vida_actual)
+
+func _physics_process(delta: float) -> void:
+	if esperando_reinicio:
+		if Input.is_key_pressed(KEY_Z):
+			get_tree().reload_current_scene()
+		return  
+	
+	if global_position.y > limite_caida_y and estado_actual != Estado.MUERTO:
+		morir()
+		
+	if estado_actual == Estado.MUERTO:
+		velocity.y += GRAVEDAD * delta
+		move_and_slide()
+		return
+		
+	if is_on_floor() and Input.is_action_just_pressed("ui_down"):
+		position.y += 2
+
+	leer_inputs()
+	actualizar_timers(delta)
+	procesar_gravedad(delta)
+	
+	if is_on_floor() and velocity.y >= 0:
+		coyote_timer = TIEMPO_COYOTE
+		timer_wall_jump = 0 
+		
+		if estado_actual != Estado.BARRIDO and not Input.is_action_pressed("ui_down"):
+			bloqueo_barrido = false
+	
+	match estado_actual:
+		Estado.IDLE:          logica_idle(delta)
+		Estado.MOVIENDO:      logica_movimiento(delta)
+		Estado.SALTANDO, \
+		Estado.CAYENDO:       logica_aire(delta)
+		Estado.ATACANDO:      logica_atacando()
+		Estado.BARRIDO:       logica_barrido(delta)
+		Estado.PARED:         logica_pared() 
+		Estado.GROUND_POUND:  logica_ground_pound(delta)
+		Estado.ATURDIDO:      logica_aturdido(delta)
+
+	move_and_slide() 
+	revisar_golpes()
+	
+	verificar_inputs_especiales()
+
+	var todas_las_balas = get_tree().get_nodes_in_group("bala")
+	for bala in todas_las_balas:
+		if global_position.distance_to(bala.global_position) < 5.0:
+			var a_salvo = false
+			if es_invulnerable: a_salvo = true 
+			if estado_actual == Estado.BARRIDO: a_salvo = true 
+			
+			if not a_salvo and estado_actual != Estado.MUERTO:
+				print("impacto de bala")
+				bala.queue_free()
+				morir()
+				break
+
+func leer_inputs() -> void:
+	if estado_actual == Estado.MUERTO: 
+		input_dir = 0
+		return
+
+	var raw_dir = Input.get_axis("ui_left", "ui_right")
+	input_dir = raw_dir if abs(raw_dir) > 0.15 else 0.0
+	
+	if Input.is_action_just_pressed("Saltar"):
+		jump_buffer_timer = TIEMPO_BUFFER_SALTO
+
+func actualizar_timers(delta: float) -> void:
+	if timer_super_salto > 0: timer_super_salto -= delta
+	if coyote_timer > 0:      coyote_timer -= delta
+	if jump_buffer_timer > 0: jump_buffer_timer -= delta
+	if timer_wall_jump > 0:   timer_wall_jump -= delta
+
+func procesar_gravedad(delta):
+	if not is_on_floor():
+		if estado_actual == Estado.GROUND_POUND: 
+			return
+		else: 
+			velocity.y += GRAVEDAD * delta
+
+func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
+	if estado_actual == nuevo: return
+	
+	var es_accion = estado_actual in [Estado.ATACANDO, Estado.BARRIDO, Estado.GROUND_POUND, Estado.ATURDIDO, Estado.MUERTO]
+	if es_accion and not forzar: return
+	
+	animaciones.speed_scale = 1.0
+	hitbox_ataque.disabled = true 
+	
+	if estado_actual == Estado.BARRIDO:
+		es_invulnerable = false
+		colision_normal.set_deferred("disabled", false)
+		hurtbox_normal.set_deferred("disabled", false)
+		colision_barrido.set_deferred("disabled", true)
+		hurtbox_barrido.set_deferred("disabled", true)
+		
+	estado_actual = nuevo
+	enemigos_golpeados.clear() # Limpiamos la lista al iniciar un nuevo movimiento
+	
+	match estado_actual:
+		Estado.BARRIDO:
+			tiempo_barrido_actual = 0.0
+			dir_accion = -1 if animaciones.flip_h else 1
+			es_invulnerable = true
+			hitbox_ataque.disabled = true 
+			animaciones.play("Barrido") 
+
+			colision_normal.set_deferred("disabled", true)
+			hurtbox_normal.set_deferred("disabled", true)
+			colision_barrido.set_deferred("disabled", false)
+			hurtbox_barrido.set_deferred("disabled", false)
+			
+		Estado.ATURDIDO:
+			tiempo_aturdido_actual = 0.0
+			hitbox_ataque.disabled = true
+			velocity.x = -dir_accion * 200 
+			velocity.y = -150 
+			animaciones.play("Muerte") 
+			animaciones.modulate = Color(0.77, 0.065, 0.278, 1.0) 
+		Estado.GROUND_POUND:
+			timer_ground_pound = PAUSA_ANTICIPACION
+			recuperando_gp = false 
+			velocity = Vector2.ZERO 
+			animaciones.play("Bomba") 
+		Estado.SALTANDO:
+			ejecutar_salto()
+		Estado.ATACANDO:  
+			iniciar_accion("Ataque")
+
+func verificar_inputs_especiales() -> void:
+	if Input.is_action_just_pressed("Ataque") and not is_on_floor():
+		var puede_hacer_gp = estado_actual in [Estado.SALTANDO, Estado.CAYENDO, Estado.PARED]
+		if puede_hacer_gp:
+			timer_wall_jump = 0
+			cambiar_estado(Estado.GROUND_POUND)
+			return
+
+	if timer_wall_jump > 0: return
+
+	if estado_actual == Estado.GROUND_POUND:
+		if recuperando_gp: return
+
+	var es_libre = estado_actual in [Estado.IDLE, Estado.MOVIENDO, Estado.SALTANDO, Estado.CAYENDO]
+	if not es_libre: return
+
+	if jump_buffer_timer > 0 and coyote_timer > 0:
+		cambiar_estado(Estado.SALTANDO)
+		return
+
+	if is_on_floor() and Input.is_action_just_pressed("ui_down") and not bloqueo_barrido:
+		cambiar_estado(Estado.BARRIDO)
+		return
+
+	if Input.is_action_just_pressed("Ataque") and is_on_floor():
+		cambiar_estado(Estado.ATACANDO)
+
+func ejecutar_salto() -> void:
+	if timer_wall_jump > 0:
+		velocity.y = FUERZA_SALTO 
+		return
+
+	var salto_final = FUERZA_SALTO
+	if timer_super_salto > 0:
+		salto_final = FUERZA_SALTO_SUPER
+		es_salto_potenciado = true
+		timer_super_salto = 0
+	else:
+		es_salto_potenciado = false
+
+	velocity.y = salto_final
+	coyote_timer = 0
+	jump_buffer_timer = 0
+
+@warning_ignore("unused_parameter")
+func logica_idle(delta: float):
+	velocity.x = 0 
+	animaciones.play("IDLE")
+	if input_dir != 0: 
+		animaciones.flip_h = (input_dir < 0)
+		cambiar_estado(Estado.MOVIENDO)
+
+@warning_ignore("unused_parameter")
+func logica_movimiento(delta: float) -> void: 
+	velocity.x = input_dir * VEL_MOVIMIENTO
+	
+	animaciones.play("Caminado")
+	if input_dir != 0: animaciones.flip_h = (input_dir < 0)
+	
+	if input_dir == 0: cambiar_estado(Estado.IDLE)
+	elif not is_on_floor() and coyote_timer <= 0: cambiar_estado(Estado.CAYENDO)
+
+@warning_ignore("unused_parameter")
+func logica_aire(delta: float) -> void:
+	if timer_wall_jump > 0:
+		if animaciones.animation != "Saltar":
+			animaciones.play("Saltar")
+		animaciones.flip_h = (velocity.x < 0)
+	else:
+		velocity.x = input_dir * VEL_MOVIMIENTO
+		
+		if input_dir != 0:
+			animaciones.flip_h = (input_dir < 0)
+		if velocity.y < 0:
+			if animaciones.animation != "Saltar":
+				animaciones.play("Saltar")
+		else:
+			if animaciones.animation != "Caida":
+				animaciones.play("Caida")
+				
+	var anim_actual = animaciones.animation
+	if anim_actual in ["Saltar", "Caida"]:
+		var ultimo_frame = animaciones.sprite_frames.get_frame_count(anim_actual) - 1
+		if animaciones.frame == ultimo_frame:
+			animaciones.pause()
+			
+	if not es_salto_potenciado and Input.is_action_just_released("Saltar") and velocity.y < -50:
+		velocity.y *= MULT_CORTE_SALTO
+		
+	if is_on_floor() and velocity.y >= 0:
+		es_salto_potenciado = false
+		cambiar_estado(Estado.IDLE if input_dir == 0 else Estado.MOVIENDO, true)
+	elif is_on_wall_only() and velocity.y > 0:
+		var n = get_wall_normal()
+		if (n.x < 0 and input_dir > 0) or (n.x > 0 and input_dir < 0): 
+			cambiar_estado(Estado.PARED, true)
+
+func logica_atacando() -> void:
+	if is_on_floor():
+		velocity.x = 0
+
+func logica_barrido(delta: float) -> void:
+	velocity.x = dir_accion * VEL_BARRIDO
+	tiempo_barrido_actual += delta
+	
+	if tiempo_barrido_actual >= TIEMPO_MAX_BARRIDO or is_on_wall():
+		es_invulnerable = false
+		bloqueo_barrido = true
+		cambiar_estado(Estado.MOVIENDO if input_dir != 0 else Estado.IDLE, true)
+
+func logica_aturdido(delta: float) -> void:
+	tiempo_aturdido_actual += delta
+	if is_on_floor() and tiempo_aturdido_actual >= TIEMPO_MAX_ATURDIDO:
+		animaciones.modulate = Color.WHITE
+		cambiar_estado(Estado.IDLE, true)
+
+func logica_pared():
+	var n = get_wall_normal()
+	var presionando_hacia_pared = (n.x < 0 and input_dir > 0) or (n.x > 0 and input_dir < 0)
+	
+	if not is_on_wall() or is_on_floor():
+		cambiar_estado(Estado.CAYENDO, true)
+		return
+	
+	velocity.y = min(velocity.y, VEL_DESLIZAMIENTO)
+	if animaciones.animation != "Pared":
+		animaciones.play("Pared")
+	
+	if animaciones.animation == "Pared" and animaciones.frame == 3:
+		animaciones.pause()
+	if n.x != 0: animaciones.flip_h = (n.x > 0)
+	if jump_buffer_timer > 0:
+		velocity.x = n.x * REBOTE_PARED_X
+		timer_wall_jump = TIEMPO_BLOQUEO_WALLJUMP
+		animaciones.flip_h = (velocity.x < 0)
+		cambiar_estado(Estado.SALTANDO, true)
+
+func logica_ground_pound(delta: float) -> void:
+	if animaciones.sprite_frames.has_animation("Bomba"):
+		if animaciones.animation != "Bomba":
+			animaciones.play("Bomba")
+		
+		var ultimo = animaciones.sprite_frames.get_frame_count("Bomba") - 1
+		if animaciones.frame >= ultimo:
+			animaciones.pause()
+			animaciones.frame = ultimo
+
+	if timer_ground_pound > 0:
+		timer_ground_pound -= delta
+		velocity = Vector2.ZERO
+		return
+
+	if recuperando_gp:
+		velocity = Vector2.ZERO
+		if not is_on_floor():
+			recuperando_gp = false
+		return
+
+	velocity.x = 0
+	velocity.y = VEL_GROUND_POUND
+	hitbox_ataque.set_deferred("disabled", false)
+	
+	if is_on_floor():
+		velocity = Vector2.ZERO
+		recuperando_gp = true
+		
+		await get_tree().create_timer(0.15).timeout 
+		
+		hitbox_ataque.set_deferred("disabled", true)
+		timer_super_salto = VENTANA_SALTO_POTENTE
+		cambiar_estado(Estado.IDLE, true)
+		recuperando_gp = false
+
+func iniciar_accion(anim: String) -> void:
+	animaciones.play(anim)
+	hitbox_ataque.disabled = false 
+	if not animaciones.animation_finished.is_connected(_on_anim_finished):
+		animaciones.animation_finished.connect(_on_anim_finished, CONNECT_ONE_SHOT)
+
+func recibir_daño(_cantidad: int = 1, _origen_daño_x: float = 0.0, es_proyectil: bool = false):
+	if es_invulnerable or estado_actual == Estado.MUERTO: return
+	if estado_actual == Estado.BARRIDO and not es_proyectil: return
+	morir()
+			
+func morir():
+	if estado_actual == Estado.MUERTO: return
+	
+	cambiar_estado(Estado.MUERTO, true)
+	vida_actual -= 1
+	cambio_vida.emit(vida_actual)
+	
+	velocity = Vector2.ZERO
+	if animaciones.sprite_frames.has_animation("Muerte"): animaciones.play("Muerte")
+	else: animaciones.stop()
+	
+	await get_tree().create_timer(1.0).timeout
+	if vida_actual > 0: respawn()
+	else: game_over_total()
+
+func respawn():
+	velocity = Vector2.ZERO
+	global_position = posicion_inicio
+	estado_actual = Estado.IDLE
+	animaciones.play("IDLE")
+	animaciones.modulate = Color.WHITE
+	es_invulnerable = false
+
+func game_over_total():
+	juego_terminado.emit()
+	esperando_reinicio = true
+
+func _on_anim_finished():
+	hitbox_ataque.disabled = true 
+	if estado_actual in [Estado.ATACANDO]:
+		cambiar_estado(Estado.IDLE, true)
+
+# =========================================================
+# 4. FUNCIONES DE COMBATE Y SEÑALES
+# =========================================================
+
+func revisar_golpes():
+	if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:
+		for area in $HitboxAtaque.get_overlapping_areas():
+			if area.is_in_group("hurtbox_enemigo") and area.owner.has_method("morir"):
+				var enemigo = area.owner
+				
+				if not enemigo in enemigos_golpeados:
+					enemigos_golpeados.append(enemigo)
+					enemigo.morir()
+					
+					if estado_actual == Estado.GROUND_POUND:
+						hitbox_ataque.set_deferred("disabled", true)
+						cambiar_estado(Estado.SALTANDO, true)
+
+	elif estado_actual == Estado.BARRIDO:
+		for area in $Hurtbox.get_overlapping_areas():
+			if area.is_in_group("hurtbox_enemigo") and area.owner.has_method("morir"):
+				var enemigo = area.owner
+				
+				if not enemigo in enemigos_golpeados:
+					enemigos_golpeados.append(enemigo)
+					enemigo.morir()
+
+func _on_hitbox_ataque_body_entered(body):
+	if body.is_in_group("rompible"):
+		if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:
+			if body.has_method("romper"): body.romper()
+			else: body.queue_free()
+
+func _on_hurtbox_body_entered(_body):
+	pass

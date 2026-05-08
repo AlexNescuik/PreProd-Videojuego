@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://cpjww1fr1a8m6"]
+
+[ext_resource type="Script" uid="uid://bl4mw6h5q7u8s" path="res://Scripts/UI UX HUD/menu_principal.gd" id="1_4kk64"]
+[ext_resource type="Texture2D" uid="uid://buox38yo2hgh4" path="res://UI/Pantallas/PcPNombre.jpg" id="1_brhro"]
+[ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="2_xwjwc"]
+[ext_resource type="Texture2D" uid="uid://db5hvwdk5m4k" path="res://Assets/UI UX HUD/Menu UI/Play.png" id="3_fh5gt"]
+[ext_resource type="StyleBox" uid="uid://cav2srirqt5ht" path="res://hoover_style.tres" id="4_p0dpe"]
+[ext_resource type="Texture2D" uid="uid://c70ft2iueerxh" path="res://Assets/UI UX HUD/Menu UI/Controles.png" id="4_y0q32"]
+[ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="5_0nth5"]
+[ext_resource type="Texture2D" uid="uid://cbv5li8pf2bf0" path="res://Assets/UI UX HUD/Menu UI/Sonido.png" id="5_qqcp7"]
+[ext_resource type="StyleBox" uid="uid://rmjjbav6lvop" path="res://focus_style.tres" id="6_0nth5"]
+
+[node name="MenuPrincipal" type="Control" unique_id=1309723877]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -0.19500732
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_stretch_ratio = 0.0
+script = ExtResource("1_4kk64")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1610492732]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -155.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_brhro")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=366990914]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1769653521]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -166.0
+offset_top = -134.5
+offset_right = 166.0
+offset_bottom = 134.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 15
+
+[node name="Jugar" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=649584883]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_p0dpe")
+theme_override_styles/pressed = ExtResource("5_0nth5")
+theme_override_styles/hover = ExtResource("4_p0dpe")
+theme_override_styles/focus = ExtResource("6_0nth5")
+text = " JUGAR"
+icon = ExtResource("3_fh5gt")
+icon_alignment = 2
+expand_icon = true
+
+[node name="Controles" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=722985688]
+layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_p0dpe")
+theme_override_styles/hover = ExtResource("4_p0dpe")
+theme_override_styles/focus = ExtResource("6_0nth5")
+text = "CONTROLES"
+icon = ExtResource("4_y0q32")
+icon_alignment = 2
+expand_icon = true
+
+[node name="Sonido" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1069812493]
+visible = false
+layout_mode = 2
+theme_override_constants/icon_max_width = 40
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_p0dpe")
+theme_override_styles/hover = ExtResource("4_p0dpe")
+theme_override_styles/focus = ExtResource("6_0nth5")
+text = " SONIDO"
+icon = ExtResource("5_qqcp7")
+icon_alignment = 2
+expand_icon = true
+
+[node name="Salir" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=416577934]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_xwjwc")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = ExtResource("4_p0dpe")
+theme_override_styles/hover = ExtResource("4_p0dpe")
+theme_override_styles/focus = ExtResource("6_0nth5")
+text = " SALIR"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Sonido" to="." method="_on_sonido_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Salir" to="." method="_on_salir_pressed"]

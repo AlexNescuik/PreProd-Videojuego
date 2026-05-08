@@ -177,6 +177,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	
 	var es_accion = estado_actual in [Estado.ATACANDO, Estado.BARRIDO, Estado.GROUND_POUND, Estado.ATURDIDO, Estado.MUERTO]
 	if es_accion and not forzar: return
+	parar_sonido_caminar()
 	
 	animaciones.speed_scale = 1.0
 	hitbox_ataque.disabled = true 
@@ -193,6 +194,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	
 	match estado_actual:
 		Estado.BARRIDO:
+			$SndBarrido.play()
 			tiempo_barrido_actual = 0.0
 			dir_accion = -1 if animaciones.flip_h else 1
 			es_invulnerable = true
@@ -212,6 +214,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			animaciones.play("Muerte") 
 			animaciones.modulate = Color(0.77, 0.065, 0.278, 1.0) 
 		Estado.GROUND_POUND:
+			$SndBomba.play()
 			timer_ground_pound = PAUSA_ANTICIPACION
 			recuperando_gp = false 
 			velocity = Vector2.ZERO 
@@ -219,6 +222,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 		Estado.SALTANDO:
 			ejecutar_salto()
 		Estado.ATACANDO:  
+			$SndAtaque.play()
 			iniciar_accion("Ataque")
 
 func verificar_inputs_especiales() -> void:
@@ -249,6 +253,7 @@ func verificar_inputs_especiales() -> void:
 		cambiar_estado(Estado.ATACANDO)
 
 func ejecutar_salto() -> void:
+	$SndSalto.play()
 	if timer_wall_jump > 0:
 		velocity.y = FUERZA_SALTO 
 		return
@@ -278,6 +283,8 @@ func logica_movimiento(delta: float) -> void:
 	velocity.x = input_dir * VEL_MOVIMIENTO
 	
 	animaciones.play("Caminado")
+	if not $SndCaminar.playing:
+		$SndCaminar.play()
 	if input_dir != 0: animaciones.flip_h = (input_dir < 0)
 	
 	if input_dir == 0: cambiar_estado(Estado.IDLE)
@@ -450,6 +457,7 @@ func revisar_golpes():
 				if not enemigo in enemigos_golpeados:
 					enemigos_golpeados.append(enemigo)
 					enemigo.morir()
+					$SndGolpeExito.play()
 					
 					if estado_actual == Estado.GROUND_POUND:
 						hitbox_ataque.set_deferred("disabled", true)
@@ -472,3 +480,11 @@ func _on_hitbox_ataque_body_entered(body):
 
 func _on_hurtbox_body_entered(_body):
 	pass
+
+func play_random_pitch(sonido: AudioStreamPlayer2D):
+	sonido.pitch_scale = randf_range(0.85, 1.15)
+	sonido.play()
+
+func parar_sonido_caminar():
+	if $SndCaminar.playing:
+		$SndCaminar.stop()
