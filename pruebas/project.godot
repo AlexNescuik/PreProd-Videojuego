@@ -10,10 +10,14 @@ config_version=5
 
 [application]
 
-config/name="pruebas"
-run/main_scene="uid://ct57jbgxg13py"
+config/name="Torbellino Jr."
+run/main_scene="uid://riwkr51a7c47"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://dt7v2q7cvy6xa"
+
+[autoload]
+
+Transicion="*uid://biyy45c534aqi"
 
 [dotnet]
 
@@ -42,10 +46,15 @@ folder_colors={
 "res://Escenas/Monos/": "purple",
 "res://Escenas/NIVELES DESCARTADOS/": "purple",
 "res://Escenas/Objetos/": "purple",
+"res://Escenas/UI UX HUD/": "purple",
 "res://Scripts/": "pink",
+"res://Scripts/Monos/": "purple",
+"res://Scripts/OBSOLETOS/": "purple",
+"res://Scripts/UI UX HUD/": "purple",
 "res://UI/": "pink",
 "res://UI/HUD Tuto/": "purple",
-"res://UI/HUD/": "purple"
+"res://UI/HUD/": "purple",
+"res://UI/Pantallas/": "purple"
 }
 
 [global_group]

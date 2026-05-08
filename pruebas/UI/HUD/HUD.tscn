@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvxqf23yd7wl6"]
 
-[ext_resource type="Script" uid="uid://borb0pf2hxqv" path="res://Scripts/hud.gd" id="1_j171n"]
+[ext_resource type="Script" uid="uid://borb0pf2hxqv" path="res://Scripts/OBSOLETOS/hud.gd" id="1_j171n"]
 [ext_resource type="Texture2D" uid="uid://bx05mxmnk33dy" path="res://UI/HUD/Corazon Lleno.png" id="2_den20"]
 [ext_resource type="Texture2D" uid="uid://rvd0xpun3871" path="res://UI/HUD/Placeholderrr.png" id="3_den20"]
 

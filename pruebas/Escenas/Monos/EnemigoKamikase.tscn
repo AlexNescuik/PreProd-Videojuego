@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://desiamc7owfj0"]
 
-[ext_resource type="Script" uid="uid://dssij18qoadt2" path="res://Scripts/enemigo_kamikase.gd" id="1_sjios"]
+[ext_resource type="Script" uid="uid://dssij18qoadt2" path="res://Scripts/Monos/enemigo_kamikase.gd" id="1_sjios"]
 [ext_resource type="Texture2D" uid="uid://bmfb6ebs2vwbn" path="res://Assets/Sprites/Enemigos/Kamikase/enemigo medio explosion.png" id="2_sjios"]
 [ext_resource type="Texture2D" uid="uid://nkv2udjoibb1" path="res://Assets/Sprites/Enemigos/Kamikase/Enemigo medio idle.png" id="2_sqal8"]
 
@@ -116,11 +116,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tlc7"]
 size = Vector2(20, 2)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_6tlc7"]
-radius = 80.00625
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sjios"]
+size = Vector2(154, 75)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_sjios"]
-radius = 53.037724
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pfnd5"]
+size = Vector2(116, 53)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_672mf"]
 size = Vector2(44.5, 46)
@@ -134,6 +134,7 @@ position = Vector2(2, -2)
 scale = Vector2(1.125, 1.125)
 sprite_frames = SubResource("SpriteFrames_vn1tc")
 animation = &"Idle"
+flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1111974272 groups=["hurtbox_enemigo"]]
 position = Vector2(3, 15)
@@ -142,18 +143,18 @@ shape = SubResource("RectangleShape2D_6tlc7")
 [node name="Pivote" type="Node2D" parent="." unique_id=82658043]
 
 [node name="RayoPared" type="RayCast2D" parent="Pivote" unique_id=1554175021]
-target_position = Vector2(26, 0)
+target_position = Vector2(-20, 0)
 
 [node name="RayoSuelo" type="RayCast2D" parent="Pivote" unique_id=1600042541]
-target_position = Vector2(20, 20)
+target_position = Vector2(0, 20)
 
 [node name="ZonaVision" type="Area2D" parent="Pivote" unique_id=1255797546]
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pivote/ZonaVision" unique_id=68175988]
-position = Vector2(2, 1)
-shape = SubResource("CircleShape2D_6tlc7")
+position = Vector2(4, -22)
+shape = SubResource("RectangleShape2D_sjios")
 debug_color = Color(0, 0.6, 0.69803923, 0.09019608)
 
 [node name="ZonaAtaque" type="Area2D" parent="Pivote" unique_id=728896614]
@@ -161,8 +162,8 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pivote/ZonaAtaque" unique_id=1899902335]
-position = Vector2(2, 1)
-shape = SubResource("CircleShape2D_sjios")
+position = Vector2(5, -11)
+shape = SubResource("RectangleShape2D_pfnd5")
 debug_color = Color(0.97573155, 0.13463551, 0.20832899, 0.41960785)
 
 [node name="HurtboxEnemigo" type="Area2D" parent="." unique_id=79704688 groups=["hurtbox_enemigo"]]

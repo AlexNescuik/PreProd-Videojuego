@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://456s3m7fpe8j"]
 
 [ext_resource type="Texture2D" uid="uid://djvssxftcut38" path="res://Assets/Sprites/Enemigos/OBSOLETOS/MonoMalo.png" id="1_lrgmp"]
-[ext_resource type="Script" uid="uid://qcka7fyv56fy" path="res://Scripts/dummy.gd" id="1_suh7a"]
+[ext_resource type="Script" uid="uid://qcka7fyv56fy" path="res://Scripts/OBSOLETOS/dummy.gd" id="1_suh7a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_suh7a"]
 size = Vector2(13, 13)

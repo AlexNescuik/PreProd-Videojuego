@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0d1duesykpxa"]
 
 [ext_resource type="Texture2D" uid="uid://b6fdis64batbv" path="res://Assets/Sprites/Enemigos/Corta Distancia/enemigo corto 1 ataque.png" id="1_5jc85"]
-[ext_resource type="Script" uid="uid://c55mxogx57k5a" path="res://Scripts/enemigo_corto.gd" id="1_6tlc7"]
+[ext_resource type="Script" uid="uid://c55mxogx57k5a" path="res://Scripts/Monos/enemigo_corto.gd" id="1_6tlc7"]
 [ext_resource type="Texture2D" uid="uid://betp2hm2onmoa" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance 1 idle.png" id="1_ncv37"]
 [ext_resource type="Texture2D" uid="uid://bshaep3mk05i4" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance caminata.png" id="1_wbt2v"]
 [ext_resource type="Texture2D" uid="uid://djnn4cbajx4fb" path="res://Assets/Sprites/Enemigos/Corta Distancia/corto alcance muerte.png" id="4_ige3y"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ct57jbgxg13py"]
 
-[ext_resource type="Script" uid="uid://u1nkjmjgk7pd" path="res://Scripts/player.gd" id="1_qgqwx"]
+[ext_resource type="Script" uid="uid://u1nkjmjgk7pd" path="res://Scripts/Monos/player.gd" id="1_qgqwx"]
 [ext_resource type="Texture2D" uid="uid://35wnb8xwa8e1" path="res://Assets/Sprites/Player/Torbellino Jr/Ataque_simple_Full_Color.png" id="2_y717v"]
 [ext_resource type="Texture2D" uid="uid://ca7fqx7u2kude" path="res://Assets/Sprites/Player/Torbellino Jr/Slide_Full_Color_.png" id="3_y717v"]
 [ext_resource type="Texture2D" uid="uid://bva16nx2q3jc3" path="res://Assets/Sprites/Player/Torbellino Jr/Panzaso_corr.png" id="4_ohiiw"]
@@ -496,9 +496,7 @@ script = ExtResource("1_qgqwx")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
 position = Vector2(22.999994, -60.250008)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"Muerte"
-frame = 8
-frame_progress = 1.0
+animation = &"IDLE"
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(23, -59)
