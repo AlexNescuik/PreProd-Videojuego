@@ -4,6 +4,8 @@ extends Control
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if has_node("MusicaMenu"):
+		$MusicaMenu.play()
 	
 	for boton in get_tree().get_nodes_in_group("botones_menu"):
 		boton.focus_entered.connect(_on_boton_hover)
@@ -19,7 +21,7 @@ func _on_boton_hover():
 func _on_jugar_pressed():
 	$SndClick.play()
 	await $SndClick.finished
-	Transicion.cambiar_escena("res://Escenas/Tutoriel.tscn")
+	Transicion.cambiar_escena("res://Escenas/Showcsase.tscn")
 
 func _on_controles_pressed():
 	$SndClick.play()

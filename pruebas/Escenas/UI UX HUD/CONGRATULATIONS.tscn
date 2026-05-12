@@ -72,9 +72,9 @@ anchor_top = 0.61
 anchor_right = 0.5
 anchor_bottom = 0.61
 offset_left = -214.0
-offset_top = -101.78
+offset_top = -98.28
 offset_right = 214.0
-offset_bottom = 101.22
+offset_bottom = 137.72
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 6
@@ -111,7 +111,7 @@ text = "Salir"
 
 [node name="SndVictoria" type="AudioStreamPlayer2D" parent="." unique_id=519492745]
 stream = ExtResource("7_lbbbq")
-volume_db = -5.0
+volume_db = -3.0
 
 [connection signal="pressed" from="VBoxContainer/VolverAJugar" to="." method="_on_volver_a_jugar_pressed"]
 [connection signal="pressed" from="VBoxContainer/Menu" to="." method="_on_menu_pressed"]

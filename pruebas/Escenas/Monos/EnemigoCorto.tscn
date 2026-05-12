@@ -198,7 +198,7 @@ size = Vector2(24, 33)
 size = Vector2(30, 36)
 
 [node name="EnemigoCorto" type="CharacterBody2D" unique_id=628822398 groups=["enemigo"]]
-collision_layer = 4
+collision_layer = 2
 script = ExtResource("1_6tlc7")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1633052241]
@@ -214,6 +214,7 @@ position = Vector2(2, 15)
 shape = SubResource("RectangleShape2D_6tlc7")
 
 [node name="Pivote" type="Node2D" parent="." unique_id=82658043]
+z_index = 2
 
 [node name="RayoPared" type="RayCast2D" parent="Pivote" unique_id=1554175021]
 target_position = Vector2(26, 0)

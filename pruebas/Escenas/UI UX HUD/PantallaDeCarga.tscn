@@ -68,3 +68,5 @@ stretch_mode = 6
 root_node = NodePath("../..")
 libraries/ = SubResource("AnimationLibrary_s57i2")
 autoplay = &"mover_fondo"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1655425850]

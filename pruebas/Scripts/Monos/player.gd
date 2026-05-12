@@ -185,6 +185,8 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 	animaciones.speed_scale = 1.0
 	hitbox_ataque.disabled = true 
 	
+	collision_mask = mask_original
+	
 	if estado_actual == Estado.BARRIDO:
 		es_invulnerable = false
 		colision_normal.set_deferred("disabled", false)
@@ -394,6 +396,9 @@ func logica_ground_pound(delta: float) -> void:
 	if timer_ground_pound > 0:
 		timer_ground_pound -= delta
 		velocity = Vector2.ZERO
+		
+		if timer_ground_pound <= 0:
+			position.y += 3
 		return
 
 	if recuperando_gp:
@@ -466,7 +471,7 @@ func _on_anim_finished():
 
 # =========================================================
 # 4. FUNCIONES DE COMBATE Y SEÑALES
-# =========================================================
+# =================================########################
 
 func revisar_golpes():
 	if estado_actual in [Estado.ATACANDO, Estado.GROUND_POUND]:

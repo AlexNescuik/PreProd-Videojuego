@@ -35,7 +35,7 @@ func _actualizar_icono(es_control):
 	
 	for etiqueta in iconos[modo]:
 		var ruta = iconos[modo][etiqueta]
-		var formato_img = "[img=32x32]" + ruta + "[/img]"
+		var formato_img = "[img]" + ruta + "[/img]"
 		texto_procesado = texto_procesado.replace(etiqueta, formato_img)
 	
 	text = "[center]" + texto_procesado + "[/center]"
