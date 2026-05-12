@@ -82,6 +82,9 @@ var bloqueo_barrido     : bool = false
 var recuperando_gp      : bool = false    
 var es_invulnerable     : bool = false
 
+# --- Sistema de Combo ---
+var paso_ataque : int = 1
+
 # #########################################################
 # 3. BUCLE PRINCIPAL
 # #########################################################
@@ -190,7 +193,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 		hurtbox_barrido.set_deferred("disabled", true)
 		
 	estado_actual = nuevo
-	enemigos_golpeados.clear() # Limpiamos la lista al iniciar un nuevo movimiento
+	enemigos_golpeados.clear() 
 	
 	match estado_actual:
 		Estado.BARRIDO:
@@ -198,7 +201,6 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			tiempo_barrido_actual = 0.0
 			dir_accion = -1 if animaciones.flip_h else 1
 			es_invulnerable = true
-			hitbox_ataque.disabled = true 
 			animaciones.play("Barrido") 
 
 			colision_normal.set_deferred("disabled", true)
@@ -208,7 +210,6 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 			
 		Estado.ATURDIDO:
 			tiempo_aturdido_actual = 0.0
-			hitbox_ataque.disabled = true
 			velocity.x = -dir_accion * 200 
 			velocity.y = -150 
 			animaciones.play("Muerte") 
@@ -222,6 +223,7 @@ func cambiar_estado(nuevo: Estado, forzar: bool = false) -> void:
 		Estado.SALTANDO:
 			ejecutar_salto()
 		Estado.ATACANDO:  
+			paso_ataque = 1
 			play_random_pitch($SndAtaque)
 			iniciar_accion("Ataque")
 
@@ -237,6 +239,20 @@ func verificar_inputs_especiales() -> void:
 
 	if estado_actual == Estado.GROUND_POUND:
 		if recuperando_gp: return
+
+	if estado_actual == Estado.ATACANDO and Input.is_action_just_pressed("Ataque"):
+		if paso_ataque == 1 and animaciones.animation == "Ataque":
+			if animaciones.frame <= 5:
+				paso_ataque = 2
+				enemigos_golpeados.clear()
+				play_random_pitch($SndAtaque)
+				iniciar_accion("Ataque2")
+			else:
+				paso_ataque = 1
+				enemigos_golpeados.clear()
+				play_random_pitch($SndAtaque)
+				iniciar_accion("Ataque")
+		return
 
 	var es_libre = estado_actual in [Estado.IDLE, Estado.MOVIENDO, Estado.SALTANDO, Estado.CAYENDO]
 	if not es_libre: return
@@ -444,7 +460,7 @@ func game_over_total():
 
 func _on_anim_finished():
 	hitbox_ataque.disabled = true 
-	if estado_actual in [Estado.ATACANDO]:
+	if estado_actual == Estado.ATACANDO:
 		cambiar_estado(Estado.IDLE, true)
 
 # =========================================================

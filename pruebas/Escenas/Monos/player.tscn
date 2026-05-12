@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://u1nkjmjgk7pd" path="res://Scripts/Monos/player.gd" id="1_qgqwx"]
 [ext_resource type="Texture2D" uid="uid://35wnb8xwa8e1" path="res://Assets/Sprites/Player/Torbellino Jr/Ataque_simple_Full_Color.png" id="2_y717v"]
+[ext_resource type="Texture2D" uid="uid://i2l0bcy2ngvu" path="res://Assets/Sprites/Player/Torbellino Jr/Torb Golpe2.png" id="3_cy4dt"]
 [ext_resource type="Texture2D" uid="uid://ca7fqx7u2kude" path="res://Assets/Sprites/Player/Torbellino Jr/Slide_Full_Color_.png" id="3_y717v"]
 [ext_resource type="Texture2D" uid="uid://bva16nx2q3jc3" path="res://Assets/Sprites/Player/Torbellino Jr/Panzaso_corr.png" id="4_ohiiw"]
 [ext_resource type="Texture2D" uid="uid://kh1jm13imrwu" path="res://Assets/Sprites/Player/Torbellino Jr/Run_Full_Color-Sheet.png" id="6_y717v"]
@@ -9,12 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://lbhh6d0l8485" path="res://Assets/Sprites/Player/Torbellino Jr/Idle_Full_Color.png" id="8_y717v"]
 [ext_resource type="AudioStream" uid="uid://b6us2qm7tuy1g" path="res://Sonido/Monos/Torbe/sfx_salto.ogg" id="10_0wcqx"]
 [ext_resource type="Texture2D" uid="uid://bop2qn416plr4" path="res://Assets/Sprites/Player/Torbellino Jr/Wall_land_Full_Color.png" id="10_oba5i"]
-[ext_resource type="AudioStream" uid="uid://t36sohxcy7ue" path="res://Sonido/Monos/Torbe/sfx_barrido.ogg" id="11_kqp5x"]
 [ext_resource type="AudioStream" uid="uid://1ow0kd4ah7l1" path="res://Sonido/Monos/Torbe/sfx_golpeAire.ogg" id="11_nfrd3"]
 [ext_resource type="Texture2D" uid="uid://bmkehu54vt3uw" path="res://Assets/Sprites/Player/Torbellino Jr/Jump_Full_Color_Sheet.png" id="11_oba5i"]
+[ext_resource type="AudioStream" uid="uid://dhktcacfylop4" path="res://Sonido/Monos/Torbe/sfx_atkDown.ogg" id="13_maep5"]
 [ext_resource type="AudioStream" uid="uid://cjgu4fpmn7c5q" path="res://Sonido/Monos/Torbe/sfx_aterrizaje.ogg" id="13_xb253"]
 [ext_resource type="AudioStream" uid="uid://d16dqsr50b6d3" path="res://Sonido/Monos/Torbe/sfx_golpe.ogg" id="14_cy4dt"]
 [ext_resource type="AudioStream" uid="uid://bmsvi7jgthp3l" path="res://Sonido/Monos/Torbe/sfx_pisada.ogg" id="14_xb253"]
+[ext_resource type="AudioStream" uid="uid://drdjh1rfu3qtq" path="res://Sonido/Monos/Torbe/sfx_muerte.ogg" id="17_41d4c"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5k7ue"]
 atlas = ExtResource("2_y717v")
@@ -40,9 +42,29 @@ region = Rect2(256, 0, 64, 64)
 atlas = ExtResource("2_y717v")
 region = Rect2(320, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ryatc"]
-atlas = ExtResource("2_y717v")
-region = Rect2(384, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmrdc"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lpp3v"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abron"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jsk84"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjin5"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fu8eu"]
+atlas = ExtResource("3_cy4dt")
+region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qfbmi"]
 atlas = ExtResource("3_y717v")
@@ -272,13 +294,33 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k71e4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ryatc")
 }],
 "loop": false,
 "name": &"Ataque",
-"speed": 10.0
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cmrdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lpp3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abron")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jsk84")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjin5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fu8eu")
+}],
+"loop": false,
+"name": &"Ataque2",
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -502,7 +544,7 @@ script = ExtResource("1_qgqwx")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1048396481]
 position = Vector2(22.999994, -60.250008)
 sprite_frames = SubResource("SpriteFrames_hqtel")
-animation = &"IDLE"
+animation = &"Ataque"
 
 [node name="ColisionNormal" type="CollisionShape2D" parent="." unique_id=1032946233]
 position = Vector2(23, -59)
@@ -550,7 +592,7 @@ stream = ExtResource("10_0wcqx")
 stream = ExtResource("11_nfrd3")
 
 [node name="SndBarrido" type="AudioStreamPlayer2D" parent="." unique_id=184749992]
-stream = ExtResource("11_kqp5x")
+stream = ExtResource("13_maep5")
 
 [node name="SndBomba" type="AudioStreamPlayer2D" parent="." unique_id=1730985238]
 stream = ExtResource("13_xb253")
@@ -561,6 +603,9 @@ pitch_scale = 1.1
 
 [node name="SndGolpeExito" type="AudioStreamPlayer2D" parent="." unique_id=230028888]
 stream = ExtResource("14_cy4dt")
+
+[node name="SndMuerte" type="AudioStreamPlayer2D" parent="." unique_id=486288302]
+stream = ExtResource("17_41d4c")
 
 [connection signal="body_entered" from="HitboxAtaque" to="." method="_on_hitbox_ataque_body_entered"]
 [connection signal="body_entered" from="Hurtbox" to="." method="_on_hurtbox_body_entered"]

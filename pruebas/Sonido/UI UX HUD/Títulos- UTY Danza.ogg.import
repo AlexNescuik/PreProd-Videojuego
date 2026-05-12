@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b7uxx843xn5oa"
+path="res://.godot/imported/Títulos- UTY Danza.ogg-9d0bef91ca4219341fb5f72b2993786a.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sonido/UI UX HUD/Títulos- UTY Danza.ogg"
+dest_files=["res://.godot/imported/Títulos- UTY Danza.ogg-9d0bef91ca4219341fb5f72b2993786a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

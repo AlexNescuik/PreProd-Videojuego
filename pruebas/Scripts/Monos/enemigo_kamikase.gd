@@ -14,19 +14,15 @@ func _ready():
 	add_to_group("enemigo")
 	estado_actual = Estado.IDLE
 	anim.play("Idle")
-	if not anim.animation_finished.is_connected(_on_anim_terminada):
-		anim.animation_finished.connect(_on_anim_terminada)
-		
-		add_to_group("enemigo")
-		$AnimatedSprite2D.play("Idle") 
 	
-	# Conectamos la señal para saber cuándo termina de explotar
 	if not anim.animation_finished.is_connected(_on_anim_terminada):
 		anim.animation_finished.connect(_on_anim_terminada)
 
 func _physics_process(delta):
 	if estado_actual == Estado.MUERTO: return
-	if not is_on_floor(): velocity.y += GRAVEDAD * delta
+	
+	if not is_on_floor(): 
+		velocity.y += GRAVEDAD * delta
 
 	match estado_actual:
 		Estado.IDLE, Estado.ACTIVADO:
@@ -67,7 +63,8 @@ func explotar():
 	if estado_actual == Estado.MUERTO or estado_actual == Estado.EXPLOTANDO: return
 	
 	estado_actual = Estado.EXPLOTANDO
-	$SndExplosion.play()
+	if has_node("SndExplosion"):
+		$SndExplosion.play()
 	anim.play("Explotar")
 	
 	var cuerpos = $Pivote/ZonaAtaque.get_overlapping_bodies()
@@ -83,7 +80,7 @@ func aplicar_daño(body):
 	if body.has_method("morir"):
 		body.morir()
 
-# --- MOROR ---
+# --- MORIR ---
 
 func morir():
 	if estado_actual == Estado.MUERTO or estado_actual == Estado.EXPLOTANDO: return
@@ -98,6 +95,7 @@ func morir():
 	if jugador:
 		add_collision_exception_with(jugador)
 	
+	# Desactivamos hitboxes y zonas de visión de forma segura
 	if $HurtboxEnemigo.is_in_group("hurtbox_enemigo"):
 		$HurtboxEnemigo.remove_from_group("hurtbox_enemigo")
 	
@@ -105,15 +103,9 @@ func morir():
 	$Pivote/ZonaAtaque.set_deferred("monitoring", false)
 	$Pivote/ZonaVision.set_deferred("monitoring", false)
 
-	if anim.sprite_frames.has_animation("Muerte"):
-		anim.play("Muerte")
-		await anim.animation_finished
-	else:
-		anim.modulate = Color(1, 1, 1, 0.5)
-		await get_tree().create_timer(0.2).timeout
-	
-	queue_free()
+	anim.play("Muerte")
 
 func _on_anim_terminada():
-	if estado_actual == Estado.EXPLOTANDO:
+	# Borramos el nodo solo cuando termine la animación de explotar o de morir
+	if estado_actual == Estado.EXPLOTANDO or estado_actual == Estado.MUERTO:
 		queue_free()

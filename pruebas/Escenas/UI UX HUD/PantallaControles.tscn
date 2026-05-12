@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b7i0uce7c7qy3"]
 
 [ext_resource type="Script" uid="uid://727juftka86t" path="res://Scripts/UI UX HUD/pantalla_controles.gd" id="1_17cmc"]
-[ext_resource type="Texture2D" uid="uid://lwb2xh8jqvnk" path="res://Assets/UI UX HUD/Teclas/TECLADO.png" id="2_l6dqx"]
-[ext_resource type="Texture2D" uid="uid://cao5fvadwn3jy" path="res://Assets/UI UX HUD/Teclas/XBOX.png" id="3_qixs3"]
-[ext_resource type="Texture2D" uid="uid://x77ts67xh310" path="res://Assets/UI UX HUD/Teclas/SWITCH.png" id="4_rdg14"]
+[ext_resource type="Texture2D" uid="uid://lwb2xh8jqvnk" path="res://Assets/UI UX HUD/Menu UI/TECLADO.png" id="2_l6dqx"]
+[ext_resource type="Texture2D" uid="uid://cao5fvadwn3jy" path="res://Assets/UI UX HUD/Menu UI/XBOX.png" id="3_qixs3"]
+[ext_resource type="Texture2D" uid="uid://x77ts67xh310" path="res://Assets/UI UX HUD/Menu UI/SWITCH.png" id="4_rdg14"]
 [ext_resource type="FontFile" uid="uid://b7046g5bf3c37" path="res://Assets/Fonts/DTM-Mono.otf" id="5_rdg14"]
 [ext_resource type="StyleBox" uid="uid://c2kuqgywid40t" path="res://normal_style.tres" id="6_37lsx"]
 [ext_resource type="StyleBox" uid="uid://d0s2ft3yal30t" path="res://Pressed_style.tres" id="7_wcuey"]
@@ -12,7 +12,12 @@
 
 [node name="PantallaControles" type="Control" unique_id=612328506]
 layout_mode = 3
-anchors_preset = 0
+anchor_right = 1.121
+anchor_bottom = 1.1110001
+offset_right = -1291.3921
+offset_bottom = -719.92804
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_17cmc")
 imagen_teclado = ExtResource("2_l6dqx")
 imagen_xbox = ExtResource("3_qixs3")
@@ -20,16 +25,31 @@ imagen_switch = ExtResource("4_rdg14")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=604841471]
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 2195.5557
+offset_bottom = 1235.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_qixs3")
 stretch_mode = 6
 
 [node name="Regresar" type="Button" parent="." unique_id=1342573511]
 layout_mode = 1
-anchors_preset = -1
-offset_left = 834.0
-offset_top = 550.0
-offset_right = 1127.0
-offset_bottom = 622.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 766.0
+offset_top = 488.0
+offset_right = 1059.0
+offset_bottom = 560.0
+grow_horizontal = 0
+grow_vertical = 0
+rotation = -9.291537e-05
 theme_override_fonts/font = ExtResource("5_rdg14")
 theme_override_font_sizes/font_size = 45
 theme_override_styles/normal = ExtResource("6_37lsx")
