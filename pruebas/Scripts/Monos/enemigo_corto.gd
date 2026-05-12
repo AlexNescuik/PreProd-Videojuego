@@ -30,13 +30,22 @@ func _physics_process(delta):
 			
 		Estado.PERSEGUIR: 
 			anim.play("Caminata")
-			if not rayo_suelo.is_colliding():
-				velocity.x = 0
-			else:
-				if jugador_objetivo and abs(jugador_objetivo.global_position.x - global_position.x) > 15.0:
+			
+			if jugador_objetivo:
+				var dir_hacia_jugador = sign(jugador_objetivo.global_position.x - global_position.x)
+				if dir_hacia_jugador != 0 and dir_hacia_jugador != direccion: 
+					voltear()
+				
+				var distancia_x = abs(jugador_objetivo.global_position.x - global_position.x)
+				
+				if rayo_pared.is_colliding() or not rayo_suelo.is_colliding():
+					velocity.x = 0
+				elif distancia_x > 28.0: 
 					velocity.x = direccion * vel_persecucion
 				else:
 					velocity.x = 0
+					if $Pivote/ZonaAtaque.overlaps_body(jugador_objetivo):
+						lanzar_ataque(jugador_objetivo)
 				
 		Estado.ATACAR: 
 			velocity.x = 0
@@ -53,7 +62,6 @@ func voltear():
 func _on_zona_vision_body_entered(body):
 	if estado_actual == Estado.MUERTO: return
 	if body.is_in_group("jugador") and estado_actual != Estado.ATACAR:
-		$SndGolpeEnemigo.play()
 		jugador_objetivo = body
 		estado_actual = Estado.PERSEGUIR
 		var dir_hacia_jugador = sign(jugador_objetivo.global_position.x - global_position.x)
@@ -70,6 +78,9 @@ func _on_zona_ataque_body_entered(body):
 	if body.is_in_group("jugador") and estado_actual == Estado.PERSEGUIR:
 		estado_actual = Estado.ATACAR
 		anim.play("Ataque")
+		
+		if has_node("SndGolpeEnemigo"):
+			$SndGolpeEnemigo.play()
 		
 		if body.has_method("morir"):
 			var a_salvo = false
@@ -108,3 +119,19 @@ func morir():
 	anim.play("Muerte")
 	await anim.animation_finished
 	queue_free()
+
+func lanzar_ataque(body):
+	if estado_actual == Estado.MUERTO or estado_actual == Estado.ATACAR: return
+	
+	estado_actual = Estado.ATACAR
+	anim.play("Ataque")
+	
+	if has_node("SndGolpeEnemigo"):
+		$SndGolpeEnemigo.play()
+	
+	if body.has_method("morir"):
+		var a_salvo = false
+		if "es_invulnerable" in body and body.es_invulnerable: a_salvo = true
+		if "estado_actual" in body and body.estado_actual == body.Estado.BARRIDO: a_salvo = true
+		if not a_salvo:
+			body.morir()

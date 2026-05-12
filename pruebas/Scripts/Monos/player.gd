@@ -430,6 +430,7 @@ func recibir_daño(_cantidad: int = 1, _origen_daño_x: float = 0.0, es_proyecti
 			
 func morir():
 	if estado_actual == Estado.MUERTO: return
+	$SndMuerte.play()
 	
 	cambiar_estado(Estado.MUERTO, true)
 	vida_actual -= 1
